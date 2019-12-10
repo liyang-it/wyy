@@ -37,12 +37,12 @@ import {Notify, Slider, Popup, Toast, Search, Circle, Sticky, Col, Row, Image as
 import axios from 'axios'
 import api from '@/api/api.js'
 import playerApi from '@/api/playerApi.js'
-import http from '@/api/http.js'
+// import http from '@/api/http.js'
 
 export default {
   /** 注册组件 */
   components: {
-    http,
+    // http,
     api: api,
     playerApi,
     [Popup.name]: Popup,

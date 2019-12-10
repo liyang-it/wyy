@@ -50,10 +50,10 @@
 /* eslint-disable */
 import axios from 'axios'
 import playerApi from '@/api/playerApi'
-import {Sticky,NavBar,Icon,Toast,Cell, CellGroup,Popup  } from 'vant'
+import {Sticky,NavBar,Icon,Toast,Cell, CellGroup,Popup,Dialog} from 'vant'
 const songPopup = () => import('@/components/found/song-popup')
 export default {
-// import引入的组件需要注入到对象中才能使用
+  //import引入的组件需要注入到对象中才能使用
   components: {
     songPopup,
     playerApi,
@@ -63,7 +63,8 @@ export default {
     [Toast.name]: Toast,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
-    [Popup.name]: Popup
+    [Popup.name]: Popup,
+    [Dialog.name]:Dialog 
   },
   data () {
     // 这里存放数据
@@ -140,13 +141,22 @@ export default {
     loadGq () {
       let loding = Toast.loading({
         duration: 0,
-        message: '加载歌单数据中...',
+        message: '加载数据中...',
         forbidClick: true,
         loadingType: 'spinner',
         forbidClick: true
       })
       let page = this.page
       let limit = this.page + 100
+      if(page > this.trackIds.length){
+        loding.clear()
+        Dialog.alert({
+          title: '提示',
+          message: '已加载到底部',
+          theme: 'round-button',
+          }).then(() => {})
+        return
+      }
       let array = this.trackIds.slice(page,limit)
       for (let i = 0;i< array.length;i++) {
         let gqId = array[i].id
@@ -209,7 +219,8 @@ export default {
     t.loadText = true
     axios.get('http://liyangit.top:3000/playlist/detail?id='+id).then((res=>{
       t.backgroundImg = res.data.playlist.coverImgUrl
-      t.backgroundImg2 = res.data.playlist.creator.backgroundUrl
+      // t.backgroundImg2 = res.data.playlist.creator.backgroundUrl // 使用歌单创建者了背景当做歌单背景
+      t.backgroundImg2 = res.data.playlist.tracks[0].al.picUrl // 使用歌单中第一手歌曲专辑图当做歌单背景
       t.gdName = res.data.playlist.name
       t.desc = res.data.playlist.description
       t.trackIds = res.data.playlist.trackIds

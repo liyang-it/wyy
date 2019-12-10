@@ -15,22 +15,27 @@
             </div>
         </van-sticky>
       </div>
-      <div style="margin-bottom: 140px;">
+      <div :style="{'margin-bottom': bottom+'px'}">
         <!-- 热搜-->
-       <div  v-show="showHotList">
-         <p style="margin: 0;font-size: 10px;margin-left: 20px;font-weight: 800;">热搜榜</p>
-          <van-cell v-for="(h, i) in hotList" :key="h.index" :label="h.content" @click="toSearchResult(h.searchWord)">
-            <template #title >
-             <div >
-               <font style="color: tan;font-size: 1.2rem;">{{i + 1}}</font>
-               <font style="margin-left: 10px;font-size: 0.8rem;">{{h.searchWord}}</font></div>
-            </template>
-            <template #right-icon>
+        <div v-show="showHotList" class="hot">
+        <van-row>
+          <van-col span="12" v-for="(h, i) in hotList" :key="h.index">
+            <van-cell   @click="toSearchResult(h.searchWord)">
+              <template #title >
+                <div>
+                  <font style="color: tan;font-size: 1.2rem;">{{i + 1}}</font>
+                  <font style="margin-left: 10px;font-size: 0.8rem;">{{h.searchWord}}</font>
+                </div>
+                <div class="van-ellipsis" style="margin-top: 4px;color: #969799;font-size: 12px;line-height: 18px;">{{h.content}}</div>
+              </template>
+              <!-- <template #right-icon>
                  <van-icon name="fire" class="fire" size="26" color="red"/>
-            </template>
-          </van-cell>
-       </div>
-       <div v-show="showSearchAdvice">
+              </template> -->
+            </van-cell>
+          </van-col>
+        </van-row>
+      </div>
+       <div v-show="showSearchAdvice" class="yb">
           <!-- 搜索预备关键字-->
           <van-cell v-for="(item, index) in gjzs" :key="index" @click="toSearchResult(item.keyword)">
             <template #title >
@@ -48,12 +53,12 @@
 
 <script>
 /* eslint-disable */
-import { Popup, Toast, Search, Circle, Sticky, Col, Row, Image as VanImage, Swipe, SwipeItem, Button, PullRefresh, Grid, GridItem, Tabbar, TabbarItem, Icon, List, Loading, Cell, CellGroup,NavBar  } from 'vant'
+import { Popup, Toast, Search, Circle, Sticky, Col, Row, Image as VanImage, Swipe, SwipeItem, Button, PullRefresh, Grid, GridItem, Tabbar, TabbarItem, Icon, List, Loading, Cell, CellGroup,NavBar} from 'vant'
 import axios from 'axios'
-import http from '@/api/http.js'
+// import http from '@/api/http.js'
 export default {
   components: {
-    http,
+    // http,
     axios,
     [Popup.name]: Popup,
     [Toast.name]: Toast,
@@ -76,7 +81,8 @@ export default {
     [Loading.name]: Loading,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
-    [NavBar.name]: NavBar 
+    [NavBar.name]: NavBar,
+    
   },
   name: 'search',
   data () {
@@ -85,7 +91,8 @@ export default {
       hotList: [],
       showSearchAdvice: false,
       showHotList: true,
-      gjzs: []
+      gjzs: [],
+      bottom: 30
     }
   },
   methods: {
@@ -115,14 +122,19 @@ export default {
     }
   },
   created () {
-    // eslint-disable-next-line no-unused-vars
-    let response = http.sendGet('http://47.99.165.122:3000/search/hot/detail')
-    this.hotList = response.data
+    axios.get('http://47.99.165.122:3000/search/hot/detail').then((res)=>{
+      this.hotList = res.data.data
+    })
+    
   },
   activated () {
     this.searchText = ''
     this.showHotList = true
     this.showSearchAdvice = false
+    let isStart = this.$store.state.is.isShowPlayer
+    if (isStart === true) {
+        this.bottom = 130
+    }
   }
 }
 </script>
@@ -160,5 +172,25 @@ export default {
     cursor: pointer;
     -webkit-user-select: none;
     user-select: none;
+}
+.hot .van-cell {
+  -webkit-transition: all 0.5s linear;
+  transition:  all 0.3s linear;
+  padding: 8px 8px;
+}
+.hot .van-cell:hover {
+  color:rgb(238, 141, 141);
+  transform: scale(1.1,1.2);
+}
+.hot .van-cell:active {
+  color:rgb(238, 141, 141);
+  transform: scale(1.1,1.2);
+}
+
+.yb .van-cell:active {
+  color:rgb(18, 120, 236);
+}
+.yb .van-cell:hover {
+  color:rgb(7, 109, 224);
 }
 </style>

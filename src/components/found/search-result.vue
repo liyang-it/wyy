@@ -597,9 +597,15 @@ export default {
 }
 .divK{
   padding: 5px 0px;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 .divK:hover{
-box-shadow: 0px 0px 5px 1px rgb(97, 95, 95);
+box-shadow: 0px 0px 10px 2px rgb(97, 95, 95);
+color:rgb(238, 141, 141);
+}
+.divK:active{
+box-shadow: 0px 0px 10px 2px rgb(97, 95, 95);
 color:rgb(238, 141, 141);
 }
 .videoDivImg{

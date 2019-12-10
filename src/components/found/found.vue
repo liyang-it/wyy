@@ -76,11 +76,13 @@
     <div>
        <!--  -->
       <van-grid :column-num="columnGd" :style="{'margin-bottom':marginBottom + 'px'}">
-        <van-grid-item class="xf" v-for="gd in gdList" :key="gd.index" @click="toGdPage(gd)" >
+        <van-grid-item class="xf"  v-for="gd in gdList" :key="gd.index" @click="toGdPage(gd)" >
           <div >
-          <van-image class="xfImg" :src="gd.picurl" />
+          <van-image  :src="gd.picurl" class="xfImg"/>
           <p class="bfl"><van-icon name="service-o" size="15"></van-icon> {{ gd.playcount}}</p>
-          <div style="height: 20px;"><span  class="gdText">{{ gd.name.substring(0,6)}}...</span></div>
+          <div style="height: 20px;">
+            <span  class="gdText">{{ gd.name.substring(0,6)}}...</span>
+          </div>
           </div>
         </van-grid-item>
         <div  style="margin-top: 20px;width: 150px;margin: 0 auto;" >
@@ -336,7 +338,7 @@ export default {
     let thic = this
     axios.get('http://www.liyangit.top/liyang/music/getPlayList.json', {params: {page: this.gdPage, limit: this.gdLimit}}).then((res) => {
       thic.gdList = res.data.data
-      thic.lbList = thic.gdList.slice(0,10)
+      thic.lbList = thic.gdList.slice(13,23)
     })
   },
   activated () {
@@ -349,6 +351,7 @@ export default {
 }
 </script>
 <style>
+
 .found_lbText{
   font-size: 1.5rem;
 }
@@ -383,20 +386,33 @@ export default {
     position: absolute;
     font-size: 13px;
 }
+.xfImg{
+  transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+}
 .xfImg :hover {
   color: red;
-  box-shadow: 0px 0px 5px 1px black;
-  font-size: 1rem;
-
+  box-shadow: 0px 0px 10px 2px rgb(36, 35, 35);
+  transform: scale(0.9); 
 }
-.xf  :hover .gdText{
+.xfImg :active {
+  color: red;
+  box-shadow: 0px 0px 10px 2px rgb(36, 35, 35);
+  transform: scale(0.9); 
+}
+.xf :hover .gdText{
   color: red;
   font-size: 1rem;
-
+}
+.xf :active .gdText{
+  color: red;
+  font-size: 1rem;
 }
 .gdText{
     font-size: 0.8rem;
     font-weight: 600;
+    -webkit-transition: all 0.2s linear;
+    transition: all 0.2s linear;
 }
 .musicFoot{
     position: fixed;

@@ -1,7 +1,13 @@
 <!--  -->
 <template>
 <div class=''>
-  <div id="dv"></div>
+  <!-- <div id="dv"></div> -->
+  <div>
+    <van-row>
+      <van-col span="12">span: 12</van-col>
+      <van-col span="12">span: 12</van-col>
+    </van-row>
+  </div>
 </div>
 </template>
 
@@ -10,13 +16,16 @@
 
 // 例如：import 《组件名称》 from '《组件路径》';
 /* eslint-disable */
+import {Col, Row} from 'vant'
 import axios from 'axios'
 const songPopup = () => import('@/components/found/song-popup')
 export default {
 // import引入的组件需要注入到对象中才能使用
   components: {
     axios,
-    songPopup
+    songPopup,
+    [Col.name]:Col,
+    [Row.name]:Row
   },
   data () {
     // 这里存放数据

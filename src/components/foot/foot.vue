@@ -134,8 +134,6 @@ export default {
   display: initial;
 }
 }
-@media (min-width: 1480px){
-}
 /**屏幕大于768像素的话 把内容居中在屏幕中间 */
   @media (min-width: 768px){
 
@@ -156,7 +154,7 @@ export default {
     background: white;
 }
 /**将 vant的 tab菜单组件 超出了设置的屏幕像素数后 固定宽度居中 */
-.van-tabbar {
+#foot .van-tabbar {
     z-index: 1;
     display: -webkit-box;
     display: -webkit-flex;
