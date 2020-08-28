@@ -1,26 +1,30 @@
 /* eslint-disable no-unused-vars */
 <template>
 <div id="app">
+  <!-- 头部  搜索款和播放按键-->
+<div >
   <van-sticky :offset-top="0">
       <div v-show="showQuery"><van-search :placeholder="Placeholder" /></div>
-      <div v-show="showGd">
-          <van-image
-          width="100%"
-          heitht="280px"
-          :src="gdSx.picUrl"
-        />
-
-      </div>
-    <div class="playImg"><van-image
+      <div class="playImg"><van-image
           round
           width="2rem"
           height="2rem"
           fit="cover"
           src="https://img.yzcdn.cn/vant/cat.jpeg"
         />
-    </div>
+      </div>
   </van-sticky>
-   <div v-show="showFount">
+</div>
+<!--歌单详情-->
+<div  v-show="showGd" >
+   <div style="position: absolute;top: 10px;left: 20px;"><van-icon name="arrow-left" color="white" size="30" @click="backFount"/></div>
+        <img :src="gdSx.picUrl" style="width: 100%;height:375px;">
+        <div style="">
+          <van-cell v-for="gq in gqList" :key="gq.index"  >{{gq}}</van-cell>
+
+        </div>
+</div>
+ <div v-show="showFount">
  <van-sticky :offset-top="53" class="head">
 
    <!--轮播图片-->
@@ -68,7 +72,7 @@
 
 /** 局部引入vant 组件 */
 // eslint-disable-next-line no-unused-vars
-import { Toast, Search, Circle, Sticky, Col, Row, Image as VanImage, Swipe, SwipeItem, Button, PullRefresh, Grid, GridItem, Tabbar, TabbarItem, Notify } from 'vant'
+import { Toast, Search, Circle, Sticky, Col, Row, Image as VanImage, Swipe, SwipeItem, Button, PullRefresh, Grid, GridItem, Tabbar, TabbarItem, Notify, Icon, List, Loading, Cell, CellGroup } from 'vant'
 // 引入自定义组件
 import fount from '@/components/fount'
 import axios from 'axios'
@@ -89,11 +93,17 @@ export default {
     [GridItem.name]: GridItem,
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
-    fount
+    fount,
+    [Icon.name]: Icon,
+    [List.name]: List,
+    [Loading.name]: Loading,
+    [Cell.name]: Cell,
+    [CellGroup.name]: CellGroup
   },
   name: 'index',
   data () {
     return {
+      gqList: [],
       showQuery: true,
       tabActive: 0,
       Placeholder: '起风了- 买辣椒也要卷',
@@ -146,7 +156,6 @@ export default {
     },
     changeLbImg () {},
     toGdPage (gd) {
-      console.log(gd)
       this.showQuery = false
       this.showFount = false
       this.showGd = true
@@ -154,8 +163,31 @@ export default {
       this.gdSx.name = gd.name
       this.gdSx.copywriter = gd.copywriter
       this.gdSx.picUrl = gd.picUrl
-      console.log(this.gdSx)
-
+      // 根据歌单ID 获取歌曲列表
+      // eslint-disable-next-line no-unused-vars
+      let url = 'https://musicapi.leanapp.cn/playlist/detail?id=' + gd.id
+      axios.get(url).then((response) => {
+        /*
+        说明 : 歌单能看到歌单名字, 但看不到具体歌单内容 , 调用此接口 ,
+        传入歌单 id, 可 以获取对应歌单内的所有的音乐(未登录状态只能获取不完整的歌单,登录后是完整的)，
+        但是返回的trackIds是完整的，tracks 则是不完整的，可拿全部 trackIds 请求一次 song/detail
+        */
+        let trackIds = response.data.playlist.trackIds
+        // eslint-disable-next-line no-unused-vars
+        let params_ = ''
+        console.log('歌曲ID数量' + JSON.stringify(trackIds.length))
+        for (let i = 0; i < trackIds.length; i++) {
+          params_ += trackIds[i].id + ','
+        }
+        // 最后查询歌曲详情
+        // eslint-disable-next-line no-unused-vars
+        let p = new URLSearchParams()
+        p.append('ids', '1387564798')
+        let gqUrl = 'https://musicapi.leanapp.cn/song/detail'
+        axios.post(gqUrl, p).then((res) => {
+          console.log('歌曲详细数据' + res.data)
+        })
+      })
       /*
       localStorage.setItem('gd', JSON.stringify(gd))
       this.$router.push({
@@ -163,6 +195,15 @@ export default {
         name: 'gdPage'
       })
       */
+    },
+    backFount () {
+      console.log('返回')
+      this.showFount = true
+      this.showRanking = false
+      this.showUser = false
+      this.showQuery = true
+      this.showFount = true
+      this.showGd = false
     }
 
   },
@@ -170,13 +211,6 @@ export default {
 
   },
   created () {
-    let bodyWidth = window.screen.width
-    alert(bodyWidth)
-    if (bodyWidth < 600) {
-      document.getElementsByTagName('body')[0].style.width = '600px'
-    } else {
-      document.getElementsByTagName('body')[0].style.width = bodyWidth + 'px'
-    }
     document.title = 'LiYangMuSic'
     // eslint-disable-next-line no-unused-vars
     let thic = this
@@ -202,7 +236,6 @@ export default {
           localStorage.setItem('localPass', thisPass)
           // 如果歌单数据存在的话 就不用自动请求新歌单数据
           if (localGdList != null) {
-            console.log(localGdList)
             thic.gdList = JSON.parse(localGdList)
           } else {
             let mrtjUrl = 'https://musicapi.leanapp.cn/personalized?limit=' + thic.gdLimit
@@ -285,5 +318,17 @@ export default {
 .xf :hover .text{
   color: red;
 
+}
+.van-tabbar {
+    z-index: 200;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    box-sizing: content-box;
+    width: 100%;
+    height: 50px;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+    background-color: #fff;
 }
 </style>
