@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 /* eslint-disable no-unused-vars */
 <template>
 <div id="app">
@@ -20,7 +21,14 @@
    <div style="position: absolute;top: 10px;left: 20px;"><van-icon name="arrow-left" color="white" size="30" @click="backFount"/></div>
         <img :src="gdSx.picUrl" style="width: 100%;height:375px;">
         <div style="">
-          <van-cell v-for="gq in gqList" :key="gq.index"  >{{gq}}</van-cell>
+          <van-cell v-for="(gq, i) in gqList" :key="gq.index">
+            <template #title>
+              <font style="color: tan;font-size: 1.2rem;">{{i + 1}}</font>
+            </template>
+            <template #right-icon>
+                <van-icon name="search" class="more" />
+            </template>
+          </van-cell>
 
         </div>
 </div>
@@ -79,6 +87,7 @@ import axios from 'axios'
 export default {
   /** 注册组件 */
   components: {
+    [Toast.name]: Toast,
     [Sticky.name]: Sticky,
     [Search.name]: Search,
     [Col.name]: Col,
@@ -104,6 +113,7 @@ export default {
   data () {
     return {
       gqList: [],
+      gqList2: [],
       showQuery: true,
       tabActive: 0,
       Placeholder: '起风了- 买辣椒也要卷',
@@ -155,18 +165,20 @@ export default {
       }
     },
     changeLbImg () {},
-    toGdPage (gd) {
-      this.showQuery = false
-      this.showFount = false
-      this.showGd = true
-      this.gdSx.id = gd.id
-      this.gdSx.name = gd.name
-      this.gdSx.copywriter = gd.copywriter
-      this.gdSx.picUrl = gd.picUrl
-      // 根据歌单ID 获取歌曲列表
+    async toGdPage (gd) {
+      //  加载
       // eslint-disable-next-line no-unused-vars
+      let loding = Toast.loading({
+        duration: 0,
+        message: '加载歌曲中...',
+        forbidClick: true,
+        loadingType: 'spinner',
+        // eslint-disable-next-line no-dupe-keys
+        forbidClick: true
+      })
+      // 根据歌单ID 获取歌曲列表
       let url = 'https://musicapi.leanapp.cn/playlist/detail?id=' + gd.id
-      axios.get(url).then((response) => {
+      await axios.get(url).then((response) => {
         /*
         说明 : 歌单能看到歌单名字, 但看不到具体歌单内容 , 调用此接口 ,
         传入歌单 id, 可 以获取对应歌单内的所有的音乐(未登录状态只能获取不完整的歌单,登录后是完整的)，
@@ -174,20 +186,23 @@ export default {
         */
         let trackIds = response.data.playlist.trackIds
         // eslint-disable-next-line no-unused-vars
-        let params_ = ''
-        console.log('歌曲ID数量' + JSON.stringify(trackIds.length))
         for (let i = 0; i < trackIds.length; i++) {
-          params_ += trackIds[i].id + ','
+          let gqUrl = 'https://musicapi.leanapp.cn/song/detail'
+          axios.get(gqUrl, {params: {ids: trackIds[i].id}}).then((res) => {
+            this.gqList2[i] = res.data.songs[0]
+          })
         }
-        // 最后查询歌曲详情
-        // eslint-disable-next-line no-unused-vars
-        let p = new URLSearchParams()
-        p.append('ids', '1387564798')
-        let gqUrl = 'https://musicapi.leanapp.cn/song/detail'
-        axios.post(gqUrl, p).then((res) => {
-          console.log('歌曲详细数据' + res.data)
-        })
+        console.log('歌曲总条数: ' + trackIds.length)
+      // 如果请求完成后 清除loding状态 显示歌曲列表
       })
+      loding.clear()
+      this.showQuery = false
+      this.showFount = false
+      this.showGd = true
+      this.gdSx.id = gd.id
+      this.gdSx.name = gd.name
+      this.gdSx.copywriter = gd.copywriter
+      this.gdSx.picUrl = gd.picUrl
       /*
       localStorage.setItem('gd', JSON.stringify(gd))
       this.$router.push({
