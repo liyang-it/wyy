@@ -30,7 +30,7 @@
             </template>
           </van-cell>
         </div>
-        <div style="width: 150px;margin: 0 auto;margin-bottom: 130px;" v-if="isShowGqText"> <a @click="loadGq" style="color:red;text-decoration-line: underline;">{{loadGqText}}</a> </div>
+        <div style="width: 150px;margin: 0 auto;margin-bottom: 50px;" v-if="isShowGqText"><van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGq">{{loadGqText}}</van-button> </div>
   <!-- songde 歌曲详情按钮-->
   <van-popup v-model="showSongde" round position="bottom" :style="{ height: '65%' }" >
   </van-popup>
@@ -54,20 +54,20 @@
   <h3 style="color: black;margin: 10px 15px;">每日歌单推荐</h3>
   </van-sticky>
   <!-- 歌单-->
-  <div class="gd" style="margin-bottom: 130px;    margin-top: 10px;">
+  <div class="gd" style="margin-bottom: 50px;    margin-top: 10px;">
     <div>
       <van-grid :column-num="columnGd" >
         <van-grid-item v-for="gd in gdList" :key="gd.index" class="xf" @click="toGdPage(gd)">
           <div >
           <van-image  :src="gd.picurl" />
-          <p class="bfl"><van-icon name="service-o" size="15"></van-icon> {{ gd.playcount}}万</p>
+          <p class="bfl"><van-icon name="service-o" size="15"></van-icon> {{ gd.playcount}}</p>
           <div style="height: 36px;"><span  class="gdText">{{ gd.name}}</span></div>
           </div>
 
         </van-grid-item>
       </van-grid>
     </div>
-     <div style="width: 150px;margin: 0 auto;" > <a @click="loadGd" style="color:red;text-decoration-line: underline;">{{loadGdText}}</a> </div>
+     <div style="margin-top: 20px;width: 150px;margin: 0 auto;" ><van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGd">{{loadGdText}}</van-button> </div>
   </div>
 </div>
 </div>
@@ -398,5 +398,16 @@ export default {
     bottom: 50px;
     width: 100%;
     z-index: 2020;
+}
+.van-search__content {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    padding-left: 12px;
+    background-color:#A4A4A4;
+    border-radius: 20px;
 }
 </style>

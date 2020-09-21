@@ -10,6 +10,20 @@ const http = {
       .then((res) => {
         return res
       })
+  },
+  sendGet: (toUrl) => {
+    let xmt = new XMLHttpRequest()
+    // eslint-disable-next-line no-unused-vars
+    let response = null
+    xmt.open('GET', 'http://47.99.165.122:3000/search/hot/detail', false)
+    xmt.onload = function (e) {
+      if (xmt.status === 200) {
+        response = xmt.response
+        console.log('sendGet方法执行结果', xmt.status)
+      }
+    }
+    xmt.send()
+    return JSON.parse(response)
   }
 }
 export default http
