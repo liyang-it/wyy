@@ -40,9 +40,9 @@
           <!--综合单曲 列表-->
           <div class="qt" v-show="showSong">
             <p>单曲</p>
-            <van-cell v-for="(t2, i2) in songs" :key="i2" :label="t2.ar[0].name +' - '+ t2.al.name" >
-            <template #title @click="startMusic(t2)">
-             <div >
+            <van-cell v-for="(t2, i2) in songs" :key="i2" :label=" t2.al.name+' - '+ t2.ar[0].name" >
+            <template #title >
+             <div @click="startMusic(t2)">
                <!-- <font style="color: tan;font-size: 1.2rem;">{{i2 + 1}}</font> -->
                <font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;color: #4994df;font-weight: bold;">{{t2.name}}</font>
             </div>
@@ -98,8 +98,8 @@
         <div >
           <strong style="margin-left: 15px;">搜索到相关歌曲:&nbsp;&nbsp;{{gqCount}}首</strong>
           <van-cell v-for="(s1, si1) in songs2" :key="si1" :label="s1.name +' - '+ s1.artists[0].name" >
-            <template #title @click="startMusic2(s1)">
-              <div >
+            <template #title >
+              <div @click="startMusic2(s1)">
                 <font style="color: tan;font-size: 1.2rem;">{{si1 + 1}}</font>
                 <font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;color: #4994df;font-weight: bold;">{{s1.name}}</font>
               </div>
@@ -486,9 +486,14 @@ export default {
   activated () {
 
     let t = this
-    if (t.searchText.length === 0) {
-      t.searchText = t.$route.params.value
+    t.searchText = t.$route.params.value
+    let isStart = t.$store.state.is.isShowPlayer
+      if (isStart === true) {
+        t.marginBottom = 160
     }
+    // if (t.searchText.length === 0) {
+    //   t.searchText = t.$route.params.value
+    // }
     t.loadData(t)
     /**
      * 必选参数 : keywords : 关键词

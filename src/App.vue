@@ -8,19 +8,10 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: 'App',
-  computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
-    // height () {
-    //   return document.documentElement.clientHeight
-    // },
-    // color () {
-    //   return 'pink'
-    // }
-  },
   created () {
-
   }
 
 }

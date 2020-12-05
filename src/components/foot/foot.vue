@@ -1,8 +1,10 @@
 <template>
 <div >
-<div class="foot_left" :style="{'height': height + 'px','width':width+'px'}">我是左边内容</div>
-<div class="foot_right" :style="{'height': height + 'px','width':width+'px'}">我是右边内容</div>
-<div id="foot" v-cloak>
+<div class="foot_left" :style="{'height': height + 'px','width':width+'px'}">
+  <canvas :height="height * 1.9" width="700" id="live2dcanvas"></canvas>
+</div>
+<div class="foot_right" :style="{'height': height + 'px','width':width+'px'}">我是右边内容->预备填充区域</div>
+<div id="foot" v-cloak :style="{'height': height + 'px'}">
   <!-- 音乐播放页面-->
   <player v-if="isShowPlayer" :style="{'display': playerStyle}" ></player>
     <!-- 音乐播放 悬浮组件-->
@@ -76,21 +78,22 @@ export default {
       this.$store.commit('setIsShowRouter', true)
       this.$store.commit('setPlayerStyle', 'none')
       this.$store.commit('setIsShowTitle', this.$store.state.musicStatus.isStart)
-      // 如果直接切换排行页面或者 我的页面  > 从播放页面直接返回到found页面 不显示歌单
-      // switch (index) {
-      //   case 0:
-      //     foot.switch1()
-      //     break
-      //   case 1:
-      //     foot.switch2()
-      //     break
-      //   case 2:
-      //     foot.switch2()
-      //     break
-      // }
     }
   },
   created () {
+  window.L2Dwidget.init(
+    {
+      pluginRootPath: 'static/live2D/',
+      pluginJsPath: 'lib/',
+      pluginModelPath: 'live2d-widget-model-koharu/assets/',
+      tagMode: false,
+      debug: false,
+      model: { jsonPath: '/static/live2D/live2d-widget-model-shizuku/assets/shizuku.model.json' },
+      // display: { position: 'left', width: 350, height: 800,right: 30 },
+      mobile: { show: true },
+      log: false
+    }
+    )
   // 访问设备处理
     let thic = this
     // eslint-disable-next-line camelcase
@@ -115,6 +118,11 @@ export default {
   height: 100%;
   display: none;
 }
+.foot_left canvas{
+    width: 100%;
+    position: relative;
+    top: -200px;
+}
 .foot_right{
   position: fixed;
   right: 0px;
@@ -122,7 +130,7 @@ export default {
   display: none;
 }
 /**屏幕宽度大于1500px 像素的时候显示左右两边div内容 */
-@media (min-width: 1500px){
+@media (min-width: 1300px){
 .foot_left{
   position: fixed;
   left: 0px;
@@ -136,8 +144,11 @@ export default {
   display:inline;
 }
 }
+@media (min-width: 1480px){
+}
 /**屏幕大于768像素的话 把内容居中在屏幕中间 */
   @media (min-width: 768px){
+
   #foot{
     width: 768px;
     margin:0 auto;
@@ -193,41 +204,5 @@ export default {
 #musicTitleDiv_ .musicTitleDiv{
   width: 720px;
 }
-
 }
-/**屏幕大于768像素的话 把内容居中在屏幕中间 */
-  /* @media (min-width: 1024px){
-  #foot{
-    width: 1024px;
-    margin:0 auto;
-  } */
-  /** 将vant  的  Sticky 粘性布局组件 超出了设置的屏幕像素后 固定宽度 居中 */
-  /* .van-sticky--fixed {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 99;
-    width: 1024px;
-    margin: auto;
-    background: white;
-} */
-
-/**将 vant的 tab菜单组件 超出了设置的屏幕像素数后 固定宽度居中 */
-/* .van-tabbar {
-    z-index: 1;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    box-sizing: content-box;
-    width: 1024px;
-    height: 50px;
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
-    background-color: #fff;
-    right: 0;
-    left: 0;
-    margin: auto;
-} */
-/* } */
 </style>

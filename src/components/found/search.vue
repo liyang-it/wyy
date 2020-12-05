@@ -118,6 +118,8 @@ export default {
   },
   activated () {
     this.searchText = ''
+    this.showHotList = true
+    this.showSearchAdvice = false
   }
 }
 </script>
