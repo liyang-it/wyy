@@ -23,6 +23,7 @@
     <div style="width: 150px;margin: 0 auto;margin-bottom: 50px;margin-top: 10px;">
       <van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadPl">加载更多评论</van-button>
     </div>
+    <br>
   </div>
   </div>
 </div>

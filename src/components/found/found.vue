@@ -23,8 +23,11 @@
                 <van-icon name="bars" class="more" size="35" @click="songde(gq)" style="background-color: white;position: absolute;right: 5px;"/>
             </template>
           </van-cell>
+          <div class="loadGqBtn" :style="{'margin-bottom':marginBottom + 'px'}" v-if="isShowGqText" >
+            <van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGq">{{loadGqText}}</van-button>
+          </div>
+          <br>
         </div>
-        <div class="loadGqBtn" :style="{'margin-bottom':marginBottom + 'px'}" v-if="isShowGqText"><van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGq">{{loadGqText}}</van-button> </div>
   <!-- songde 歌曲详情按钮-->
   <van-popup v-model="showSongde" round position="bottom" :style="{ height: '30%' }" >
     <song-popup :music_popup="music_popup"></song-popup>
@@ -61,7 +64,7 @@
     </div>
   </div>
   <!-- 歌单列表-->
-  <div id="gdDiv" class="gd" :style="{'margin-bottom':marginBottom + 'px'}" >
+  <div id="gdDiv" class="gd"  >
     <div style="width: 120px;height:30px;">
         <div>
           <img src="../../assets/plant1.png" alt="" style="height: 30px; width: 30px;">
@@ -71,7 +74,8 @@
         </div>
     </div>
     <div>
-      <van-grid :column-num="columnGd" >
+       <!--  -->
+      <van-grid :column-num="columnGd" :style="{'margin-bottom':marginBottom + 'px'}">
         <van-grid-item class="xf" v-for="gd in gdList" :key="gd.index" @click="toGdPage(gd)" >
           <div >
           <van-image class="xfImg" :src="gd.picurl" />
@@ -79,9 +83,14 @@
           <div style="height: 20px;"><span  class="gdText">{{ gd.name.substring(0,6)}}...</span></div>
           </div>
         </van-grid-item>
+        <div  style="margin-top: 20px;width: 150px;margin: 0 auto;" >
+        <van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGd">{{loadGdText}}</van-button>
+      </div>
       </van-grid>
+      <br>
+      <br>
+      <br>
     </div>
-     <div  style="margin-top: 20px;width: 150px;margin: 0 auto;" ><van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGd">{{loadGdText}}</van-button> </div>
   </div>
 </div>
 </div>
@@ -329,8 +338,14 @@ export default {
       thic.gdList = res.data.data
       thic.lbList = thic.gdList.slice(0,10)
     })
- 
-  }
+  },
+  activated () {
+    let t = this
+    let isStart = t.$store.state.is.isShowPlayer
+    if (isStart === true) {
+        t.marginBottom = 160
+    }
+  } 
 }
 </script>
 <style>

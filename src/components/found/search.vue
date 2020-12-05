@@ -15,8 +15,9 @@
             </div>
         </van-sticky>
       </div>
-       <!-- 热搜-->
-       <div style="margin-bottom: 140px;" v-show="showHotList">
+      <div style="margin-bottom: 140px;">
+        <!-- 热搜-->
+       <div  v-show="showHotList">
          <p style="margin: 0;font-size: 10px;margin-left: 20px;font-weight: 800;">热搜榜</p>
           <van-cell v-for="(h, i) in hotList" :key="h.index" :label="h.content" @click="toSearchResult(h.searchWord)">
             <template #title >
@@ -40,6 +41,8 @@
             </template>
           </van-cell>
        </div>
+      </div>
+      <br>
   </div>
 </template>
 

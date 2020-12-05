@@ -16,6 +16,7 @@
            <strong>歌手简介</strong>
            <p>{{artist.briefDesc}}</p>
         </div>
+        <br>
       </van-tab>
       <van-tab title="歌曲">
         <div class="desc" :style="{'margin-bottom': marginBottom  + 'px'}">

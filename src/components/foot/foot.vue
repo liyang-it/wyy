@@ -1,9 +1,11 @@
 <template>
 <div >
 <div class="foot_left" :style="{'height': height + 'px','width':width+'px'}">
-  <canvas :height="height * 1.9" width="700" id="live2dcanvas"></canvas>
+  <h3>我是左边内容->预备填充区域</h3>
 </div>
-<div class="foot_right" :style="{'height': height + 'px','width':width+'px'}">我是右边内容->预备填充区域</div>
+<div class="foot_right" :style="{'height': height + 'px','width':width+'px'}">
+  <h3>我是右边内容->预备填充区域</h3>
+</div>
 <div id="foot" v-cloak :style="{'height': height + 'px'}">
   <!-- 音乐播放页面-->
   <player v-if="isShowPlayer" :style="{'display': playerStyle}" ></player>
@@ -81,19 +83,7 @@ export default {
     }
   },
   created () {
-  window.L2Dwidget.init(
-    {
-      pluginRootPath: 'static/live2D/',
-      pluginJsPath: 'lib/',
-      pluginModelPath: 'live2d-widget-model-koharu/assets/',
-      tagMode: false,
-      debug: false,
-      model: { jsonPath: '/static/live2D/live2d-widget-model-shizuku/assets/shizuku.model.json' },
-      // display: { position: 'left', width: 350, height: 800,right: 30 },
-      mobile: { show: true },
-      log: false
-    }
-    )
+
   // 访问设备处理
     let thic = this
     // eslint-disable-next-line camelcase
@@ -113,21 +103,19 @@ export default {
   background-color: white;
 }
 .foot_left{
+  text-align: center;
   position: fixed;
   left: 0px;
   height: 100%;
+  /* visibility: hidden; */
   display: none;
-}
-.foot_left canvas{
-    width: 100%;
-    position: relative;
-    top: -200px;
 }
 .foot_right{
   position: fixed;
   right: 0px;
   height: 100%;
   display: none;
+  text-align: center;
 }
 /**屏幕宽度大于1500px 像素的时候显示左右两边div内容 */
 @media (min-width: 1300px){
@@ -135,13 +123,15 @@ export default {
   position: fixed;
   left: 0px;
   height: 100%;
-  display: inline;
+  /* visibility: initial; */
+  display: initial;
 }
 .foot_right{
   position: fixed;
   right: 0px;
   height: 100%;
-  display:inline;
+  /* visibility: initial; */
+  display: initial;
 }
 }
 @media (min-width: 1480px){

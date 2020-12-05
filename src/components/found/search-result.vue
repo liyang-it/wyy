@@ -488,7 +488,7 @@ export default {
     let t = this
     t.searchText = t.$route.params.value
     let isStart = t.$store.state.is.isShowPlayer
-      if (isStart === true) {
+    if (isStart === true) {
         t.marginBottom = 160
     }
     // if (t.searchText.length === 0) {
