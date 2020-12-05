@@ -68,6 +68,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         : config.build.index,
       template: 'index.html',
       inject: true,
+      favicon: 'favicon.ico',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -128,7 +129,7 @@ if (config.build.productionGzip) {
 
   webpackConfig.plugins.push(
     new CompressionWebpackPlugin({
-      asset: '[path].gz[query]',
+      filename: '[path].gz[query]',
       algorithm: 'gzip',
       test: new RegExp(
         '\\.(' +

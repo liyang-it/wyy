@@ -9,6 +9,7 @@ export default new Vuex.Store({
       startTime: '00:00',
       stopTime: '00:00',
       isStart: false,
+      isStop: false,
       musicIconStyle: '',
       style: '',
       jdt: 0,
@@ -28,25 +29,16 @@ export default new Vuex.Store({
     is: {
       isShowPlayer: false,
       isShowGd: false,
-      isSwitch: false,
       isShowQuery: true,
-      isShowStartImg: false,
-      isShowFound: true
+      isShowFound: true,
+      isShowRouter: true,
+      isShowTitle: false
     }
   },
   mutations: {
-    setIsShowStartImg (state, value) {
-      state.is.isShowStartImg = value
-    },
     setIsShowFound (state, value) {
       state.is.isShowFound = value
       state.is.isShowQuery = value
-    },
-    setIsSwitch (state, value) {
-      state.is.isSwitch = value
-    },
-    setMusicIconStyle (state, value) {
-      state.musicStatus.musicIconStyle = value
     },
     setMaxJdt (state, value) {
       state.musicStatus.maxPlayTime = value
@@ -56,6 +48,9 @@ export default new Vuex.Store({
     },
     setPlayerStyle (state, value) {
       state.musicStatus.style = value
+    },
+    setIsStop (state, value) {
+      state.musicStatus.isStop = value
     },
     setIsStart (state, value) {
       state.musicStatus.isStart = value
@@ -80,6 +75,12 @@ export default new Vuex.Store({
     },
     hideGd (state) {
       state.is.isShowGd = false
+    },
+    setIsShowRouter (state, value) {
+      state.is.isShowRouter = value
+    },
+    setIsShowTitle (state, value) {
+      state.is.isShowTitle = value
     }
   },
   getters: {

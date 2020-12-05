@@ -5,6 +5,19 @@
 const path = require('path')
 
 module.exports = {
+    // 关闭 vue-cli3预加载
+    chainWebpack: config => {
+      // 移除 prefetch 插件
+      config.plugins.delete('prefetch')
+  
+      // 或者
+      // 修改它的选项：
+      config.plugin('prefetch').tap(options => {
+        options[0].fileBlacklist = options[0].fileBlacklist || []
+        options[0].fileBlacklist.push(/myasyncRoute(.)+?\.js$/)
+        return options
+      })
+    },
   dev: {
     // Paths
     assetsSubDirectory: 'static',
@@ -12,7 +25,7 @@ module.exports = {
     proxyTable: {},
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '192.168.21.90', // can be overwritten by process.env.HOST
     port: 1976, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -52,14 +65,14 @@ module.exports = {
     /**
      * Source Maps
      */
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
+    productionGzip: true,
     productionGzipExtensions: ['js', 'css'],
     // Run the build command with an extra argument to
     // View the bundle analyzer report after build finishes:

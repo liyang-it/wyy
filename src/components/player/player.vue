@@ -1,23 +1,19 @@
 <template>
-  <div id="player">
-  <div class="musicBody" :style="{'height': height+ 'px'}" ></div>
+<div id="player" class="player" >
+  <div class="musicBody" :style="{'height': height + 'px','background-image': 'url('+music.pic+')'}"></div>
       <div class="headMusic">
         <div style="margin-left: 10px; margin-top: 10px;"><van-icon name="arrow-down" size="30" @click="backGd"/></div>
-          <h3 class="h3">{{music.title}}</h3><h4 class="h4">{{music.artist}}</h4>
+        <div>
+          <h3 class="h3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{music.title}} - {{music.artist}}</h3>
+          <!-- <h4 class="h4"></h4> -->
+        </div>
       </div>
-      <div style="position: absolute;width: 100%;top: 20%;" >
-        <div  class="musicConten">
-      <van-image
-          class="xz"
-          @click="playMusic"
-          round
-          width="100%"
-          height="100%"
-          :src="music.pic"
-      />
-      <audio :src="music.src" ref="audio"  @ended="ended" @loadeddata="loadeddata" @timeupdate="timeupdate" @error="error" autoplay></audio>
-      </div>
-      </div>
+    <div class="contentImg" >
+        <div  class="musicConten" :style="{'height': pmHeight}">
+          <van-image class="xz" width="100%" height="100%" :src="music.pic"/>
+          <audio :src="music.src" ref="audio"  @ended="ended" @loadeddata="loadeddata" @timeupdate="timeupdate" @error="error" autoplay></audio>
+        </div>
+    </div>
     <div class="btns">
       <table >
         <tr style="height: 40px;">
@@ -36,21 +32,19 @@
   </div>
 </template>
 <script>
-import Aplayer from 'vue-aplayer'
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable */
+import {Notify, Slider, Popup, Toast, Search, Circle, Sticky, Col, Row, Image as VanImage, Swipe, SwipeItem, Button, PullRefresh, Grid, GridItem, Tabbar, TabbarItem, Icon, List, Cell, CellGroup, Progress, CountDown } from 'vant'
 import axios from 'axios'
 import api from '@/api/api.js'
 import playerApi from '@/api/playerApi.js'
 import http from '@/api/http.js'
-import { Slider, Popup, Toast, Search, Circle, Sticky, Col, Row, Image as VanImage, Swipe, SwipeItem, Button, PullRefresh, Grid, GridItem, Tabbar, TabbarItem, Icon, List, Loading, Cell, CellGroup, Progress, CountDown } from 'vant'
-export default {
 
+export default {
   /** 注册组件 */
   components: {
     http,
     api: api,
     playerApi,
-    Aplayer,
     [Popup.name]: Popup,
     [Toast.name]: Toast,
     [Sticky.name]: Sticky,
@@ -69,18 +63,17 @@ export default {
     [TabbarItem.name]: TabbarItem,
     [Icon.name]: Icon,
     [List.name]: List,
-    [Loading.name]: Loading,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [Progress.name]: Progress,
     [CountDown.name]: CountDown,
-    [Slider.name]: Slider
+    [Slider.name]: Slider,
+    [Notify.name]: Notify
   },
   name: 'playMusic',
   data () {
     return {
-      height: document.documentElement.clientHeight - 50, // 播放页面界面高度与屏幕一样
-      width: document.documentElement.clientWidth - 30,
+      height_: document.documentElement.clientHeight - 30,
       name: null,
       playIcon: 'play-circle',
       playIcons: ['play-circle', 'pause-circle'],
@@ -90,20 +83,33 @@ export default {
   computed: {
     music () {
       return this.$store.state.music
+    },
+    pmHeight () {
+      let height = document.documentElement.clientWidth * 0.75
+      return height
+    },
+    height () {
+      return this.height_
+    }
+  },
+  mounted () {
+    let t = this
+      window.onresize = function(){
+        let clientHeight = document.documentElement.clientHeight - 30
+        t.height_ = clientHeight
     }
   },
   watch: {
+
   },
   methods: {
+    // 音乐进度
     dragend (value) {
       this.$refs.audio.currentTime = value
     },
     down () {
-      // eslint-disable-next-line no-unused-vars
       let downUrl = this.$refs.audio.src // 音乐地址
-      // eslint-disable-next-line no-unused-vars
       let fileName = playerApi.downFileName // 文件名设置
-      // eslint-disable-next-line no-unused-vars
       axios({
         method: 'get',
         url: downUrl,
@@ -111,13 +117,9 @@ export default {
         headers: {'content-type': 'audio/mpeg'}
         // headers: {'content-length': '4066786', 'content-type': 'audio/mpeg'}
       }).then((res) => {
-        console.log(res)
-        // eslint-disable-next-line no-unused-vars
         let blobType = 'application/force-download'
-        // eslint-disable-next-line no-unused-vars
         let blob = new Blob([res.data], {type: res.data.type}) // 创建blob 设置blob文件类型 data 设置为后端返回的文件 type:这里设置后端返回的类型 为 mp3
         let downa = document.createElement('a') // 创建A标签
-        // eslint-disable-next-line no-unused-vars
         let href = window.URL.createObjectURL(blob) // 创建下载的链接
         downa.href = href // 下载地址
         downa.download = fileName // 下载文件名
@@ -129,11 +131,10 @@ export default {
         console.log(error)
       })
     },
+    // 按钮播放
     play () {
-      // eslint-disable-next-line no-unused-vars
       let isStart = this.$store.state.musicStatus.isStart
       if (isStart === true) {
-        // eslint-disable-next-line no-unused-vars
         let isPaused = this.$refs.audio.paused // 是否暂停状态
         if (isPaused === true) {
           this.$refs.audio.play()
@@ -143,69 +144,69 @@ export default {
           this.playIcon = this.playIcons[0]
         }
       } else {
-        Toast.fail('音乐加载失败')
+        Notify({ type: 'danger', message: '音乐加载失败' })
       }
     },
-    backGd () {
-      /**
-       * 如果是排行页面或者我的页面切换过来 不需要显示歌单，直接显示 found
-       */
-      // eslint-disable-next-line no-unused-vars
-      let isSwitch = this.$store.state.is.isSwitch
-      if (isSwitch === true) {
-        console.log('返回不显示歌单')
-        this.$store.commit('setIsShowFound', true)
-        this.$store.commit('setIsShowStartImg', true)
-        this.$store.commit('setPlayerStyle', 'none')
-        this.$store.commit('setMusicIconStyle', '')
-      } else {
-        playerApi.showGd()
-      }
-    },
-    playMusic () {
-    },
-    ended () {
-      console.log('播放结束')
+    wbPlay () {
+      // 外部调用 
+      let isStop = this.$store.state.musicStatus.isStop
+      this.$refs.audio.pause()
       this.playIcon = this.playIcons[0]
     },
+    backGd () {
+      playerApi.showGd()
+    },
+    // 播放结束
+    ended () {
+      this.playIcon = this.playIcons[0]
+      this.play()
+    },
+    // audio 加载完毕
     loadeddata () {
       this.playIcon = 'pause-circle'
       // 音乐总长度(单位:秒)
       this.musicMaxTime = Math.floor(this.$refs.audio.duration)
-      // 音乐分钟
-      // eslint-disable-next-line no-unused-vars
+      // 计算出 音乐分钟
       let time = playerApi.getMusicRunTime(this.musicMaxTime)
       this.$store.commit('setMaxJdt', this.musicMaxTime)
       this.$store.commit('setIsStart', true)
+      this.$store.commit('setIsStop', true)
       this.$store.commit('setStopTime', time)
     },
+    // audio播放中
     timeupdate () {
+
+      let isStop = this.$store.state.musicStatus.isStop
+      if (isStop === false) {
+        // 说明外部已经暂停音乐
+        this.wbPlay()
+      }
       // 音乐当前长度(单位:秒)
       let musicTime = Math.floor(this.$refs.audio.currentTime)
-      // eslint-disable-next-line no-unused-vars
       let time = playerApi.getMusicRunTime(musicTime)
       this.$store.commit('setJdt', musicTime)
       this.$store.commit('setStartTime', time)
+      this.$store.commit('setIsStop', true)
     },
+    // audio加载失败
     error () {
-      Toast.fail('音乐加载失败')
+      Notify({ type: 'danger', message: '音乐加载失败' })
       this.playIcon = 'play-circle'
     }
   }
 }
 </script>
 <style >
-#player{
-  height: 250px;
-  width: 100%;
-  background-color: red;
+.player{
+  background-size: cover;
 }
+
   .headMusic{
-    position: absolute;
     top: -10px;
     width: 100%;
     color: white;
     margin-top: 10px;
+    position: absolute;
   }
   .h3{
     text-align: center;
@@ -216,25 +217,21 @@ export default {
     margin-top: -18px;
   }
   .musicBody{
+    background-size: cover;
     margin-top: -10px;
-background: #654ea3;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #eaafc8, #654ea3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    filter: blur(6px);
   }
   .musicConten{
-    width: 250px;
-    height: 250px;
+    width: 75%;
     margin: 0 auto;
   }
-  .btns {
-    width: 98%;
-    height: 100px;
+  .contentImg{
+    width: 100%;
+    top: 10%;
     position: absolute;
-    bottom: 12%;
-
   }
-    .btns font{
+
+  .btns font{
     color: white;
   }
   .btns table{
@@ -246,4 +243,34 @@ background: linear-gradient(to right, #eaafc8, #654ea3); /* W3C, IE 10+/ Edge, F
     width: 12px;
     height: 12px;
 }
+  .btns {
+    width: 98%;
+    height: 100px;
+    bottom: 12%;
+    position: absolute;
+  }
+  .xz{
+    border-radius: 10%;
+    overflow: auto;
+  }
+  @media (min-width: 768px){
+  .headMusic{
+    top: -10px;
+    width: 768px;
+    color: white;
+    margin-top: 10px;
+    position: absolute;
+  }
+  .btns {
+    width: 768px;
+    height: 100px;
+    bottom: 12%;
+    position: absolute;
+    }
+  .contentImg{
+    width: 768px;
+    top: 10%;
+    position: absolute;
+  }
+  }
 </style>

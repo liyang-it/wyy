@@ -1,93 +1,106 @@
 <template>
-<div id="app">
+<div id="app2">
 <div >
+  <!--搜索框 固定-->
   <van-sticky :offset-top="0">
       <div v-show="showQuery"><van-search :placeholder="Placeholder" @click="search"/></div>
-      <div class="playImg" v-if="isStart" :style="{'display': musicIconStyle}">
-        <van-image class="xz"
-          @click="clickIconShowPlay"
-          round
-          width="2.5rem"
-          height="2.5rem"
-          fit="cover"
-          :src="$store.state.music.pic"
-        />
-      </div>
   </van-sticky>
 </div>
-<!--歌单详情-->
+<!--歌单详情(歌曲列表)-->
+<transition name="van-fade">
 <div  v-show="isShowGd" >
-   <div style="position: absolute;top: 10px;left: 20px;"><van-icon name="arrow-left" color="white" size="30" @click="backFount"/></div>
-   <div style="position: absolute;top: 180px;left: 10px;color: white;"><span>{{gdSx.name}}</span><br><span>--     {{gdSx.copywriter}}</span></div>
-        <img :src="gdSx.picUrl" style="width: 100%;height:375px;margin-top: -60px;">
-        <div style="margin-top: -50px;">
+   <div style="position: relative;top: 10px;left: 20px;" @click="backFount"><van-icon name="arrow-left" color="white" size="30" ></van-icon><span style="font-size: 18px;color: white;top: -8px;position: relative;font-weight: bold;">返回</span></div>
+   <div style="position: relative;top: 170px;left: 10px;color: white;"><span>{{gdSx.name}}</span><br><span>--     {{gdSx.copywriter}}</span></div>
+   <div id="gdxqImg">
+     <img :src="gdSx.picUrl" style="width: 100%;height: 100%;object-fit: fill;">
+   </div>
+        <div>
           <van-cell v-for="(gq, i) in gqList" :key="gq.index" :label="gq.artist+' - '+gq.alName" >
             <template #title >
-             <div @click="startMusic(gq)"><font style="color: tan;font-size: 1.2rem;">{{i + 1}}</font><font style="margin-left: 10px;font-size: 1.0rem;">{{gq.title}}</font></div>
+             <div @click="startMusic(gq)"><font style="color: tan;font-size: 1.2rem;">{{i + 1}}</font><font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;">{{gq.title}}</font></div>
             </template>
             <template #right-icon>
-                <van-icon name="bars" class="more" size="26" @click="songde(gq)"/>
+                <van-icon name="bars" class="more" size="35" @click="songde(gq)" style="background-color: white;position: absolute;right: 5px;"/>
             </template>
           </van-cell>
         </div>
-        <div style="width: 150px;margin: 0 auto;margin-bottom: 50px;" v-if="isShowGqText"><van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGq">{{loadGqText}}</van-button> </div>
+        <div class="loadGqBtn" :style="{'margin-bottom':marginBottom + 'px'}" v-if="isShowGqText"><van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGq">{{loadGqText}}</van-button> </div>
   <!-- songde 歌曲详情按钮-->
-  <van-popup v-model="showSongde" round position="bottom" :style="{ height: '65%' }" >
+  <van-popup v-model="showSongde" round position="bottom" :style="{ height: '30%' }" >
+    <song-popup :music_popup="music_popup"></song-popup>
   </van-popup>
 </div>
-<!-- 播放歌曲-->
-<!--<play-music :music1="music1" :url="url" :showPlay="showPlay" v-show="showMusicPlay" @backGd="backGd"></play-music>-->
-  <!--轮播图片-->
+</transition>
+  <!--轮播图片 、歌单 、 新音乐-->
  <div v-show="showFount">
- <van-sticky :offset-top="53" class="head">
-  <div style="width: 90%;margin: -10px auto;height: 200px;    box-shadow: 0px 0px 20px 3px;margin-top:10px;" id="lb">
-  <van-swipe  :autoplay="3000"  @change="changeLbImg" :height="200" >
+  <div class="found_lb"  id="lb">
+  <van-swipe  :autoplay="3000"  @change="changeLbImg"  >
     <van-swipe-item v-for="value in lbList" :key="value.index">
-      <img :src="value" alt="" class="lbImg"></van-swipe-item>
+      <img :src="value.picurl" alt="" class="lbImg" @click="toGdPage(value)">
+    </van-swipe-item>
     <template #indicator>
-    <div class="custom-indicator">
+    <div class="custom-indicator found_lbText">
       {{ current + 1 }}/{{lbList.length}}
     </div>
   </template>
   </van-swipe>
   </div>
-  <h3 style="color: black;margin: 10px 15px;">每日歌单推荐</h3>
-  </van-sticky>
-  <!-- 歌单-->
-  <div class="gd" style="margin-bottom: 50px;    margin-top: 10px;">
+  <!-- 每日新音乐-->
+  <div>
+    <div style="width: 120px;height:30px;">
+        <div>
+          <img src="../../assets/plant2.png" alt="" style="height: 30px; width: 30px;">
+        </div>
+        <div style="margin-left: 30px;margin-top: -30px;">
+          <p style="margin: 0px 0px 0px 0px;font-size: 18px;font-weight: 900;">新歌</p>
+        </div>
+    </div>
+    <div>
+      <!--新音乐组件-->
+      <newsong @editMarginBottom="editMarginBottom"></newsong>
+    </div>
+  </div>
+  <!-- 歌单列表-->
+  <div id="gdDiv" class="gd" :style="{'margin-bottom':marginBottom + 'px'}" >
+    <div style="width: 120px;height:30px;">
+        <div>
+          <img src="../../assets/plant1.png" alt="" style="height: 30px; width: 30px;">
+        </div>
+        <div style="margin-left: 30px;margin-top: -30px;">
+          <p style="margin: 0px 0px 0px 0px;font-size: 18px;font-weight: 900;">推荐歌单</p>
+        </div>
+    </div>
     <div>
       <van-grid :column-num="columnGd" >
-        <van-grid-item v-for="gd in gdList" :key="gd.index" class="xf" @click="toGdPage(gd)">
+        <van-grid-item class="xf" v-for="gd in gdList" :key="gd.index" @click="toGdPage(gd)" >
           <div >
-          <van-image  :src="gd.picurl" />
+          <van-image class="xfImg" :src="gd.picurl" />
           <p class="bfl"><van-icon name="service-o" size="15"></van-icon> {{ gd.playcount}}</p>
-          <div style="height: 36px;"><span  class="gdText">{{ gd.name}}</span></div>
+          <div style="height: 20px;"><span  class="gdText">{{ gd.name.substring(0,6)}}...</span></div>
           </div>
-
         </van-grid-item>
       </van-grid>
     </div>
-     <div style="margin-top: 20px;width: 150px;margin: 0 auto;" ><van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGd">{{loadGdText}}</van-button> </div>
+     <div  style="margin-top: 20px;width: 150px;margin: 0 auto;" ><van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGd">{{loadGdText}}</van-button> </div>
   </div>
 </div>
 </div>
 </template>
 <script>
-
+/* eslint-disable */
 /** 局部引入vant 组件 */
-// eslint-disable-next-line no-unused-vars
-import { Popup, Toast, Search, Circle, Sticky, Col, Row, Image as VanImage, Swipe, SwipeItem, Button, PullRefresh, Grid, GridItem, Tabbar, TabbarItem, Notify, Icon, List, Loading, Cell, CellGroup } from 'vant'
+import { NoticeBar, Popup, Toast, Search, Circle, Sticky, Col, Row, Image as VanImage, Swipe, SwipeItem, Button, PullRefresh, Grid, GridItem, Tabbar, TabbarItem, Notify, Icon, List, Loading, Cell, CellGroup } from 'vant'
 // 引入自定义组件
-import Aplayer from 'vue-aplayer'
 import axios from 'axios'
 import playerApi from '@/api/playerApi.js'
-// import playMusic from '@/components/playMusic'
+const newsong = () => import('@/components/found/newsong')
+const songPopup = () => import('@/components/found/song-popup')
 export default {
   /** 注册组件 */
   components: {
+    songPopup,
     playerApi,
-    Aplayer,
-    // 'play-music': playMusic,
+    newsong,
     [Popup.name]: Popup,
     [Toast.name]: Toast,
     [Sticky.name]: Sticky,
@@ -108,7 +121,8 @@ export default {
     [List.name]: List,
     [Loading.name]: Loading,
     [Cell.name]: Cell,
-    [CellGroup.name]: CellGroup
+    [CellGroup.name]: CellGroup,
+    [NoticeBar.name]: NoticeBar
   },
   name: 'index',
   data () {
@@ -141,32 +155,30 @@ export default {
         name: null,
         copywriter: null,
         picUrl: null
-      }
+      },
+      osText: '',
+      music_popup: {},
+      marginBottom: 50
     }
   },
   watch: {
   },
   methods: {
+    // 点击 搜索框
     search () {
-      this.$router.push({path: 'search'})
-    },
-    clickIconShowPlay () {
-      this.$store.commit('setIsShowFound', false)
-      playerApi.showPlay()
+      this.$router.push({path:'/search'})
     },
     changeLbImg (index) {
       this.current = index
     },
+    // 点击歌单 显示 歌单详细 歌曲列表
     toGdPage (gd) {
-      this.$store.commit('setIsSwitch', false)
       //  加载
-      // eslint-disable-next-line no-unused-vars
       let loding = Toast.loading({
         duration: 0,
         message: '加载中...',
         forbidClick: true,
         loadingType: 'spinner',
-        // eslint-disable-next-line no-dupe-keys
         forbidClick: true
       })
       this.$store.commit('setIsShowFound', false)
@@ -180,39 +192,43 @@ export default {
         this.gqList = res.data.data
         loding.clear()
         this.isShowGqText = true
-        // eslint-disable-next-line no-unused-vars
         let t = document.body.clientHeight // 获取页面最大高度 window.scroll({ top: t, left: 0, behavior: 'smooth' }) 滚动到页面最底部
         window.scroll({ top: 0, left: 0, behavior: 'smooth' }) // 滚动到页面最顶部
       })
     },
+    // 歌单返回 首页
     backFount () {
-      console.log('返回')
       this.$store.commit('setIsShowFound', true)
-      this.$store.commit('setIsShowStartImg', true)
       this.$store.commit('hideGd')
     },
+    // 歌曲列表 歌曲详情
     songde (gq) {
+      gq.alName = gq.title
+      this.music_popup = gq
       this.showSongde = true
     },
+    // 播放音乐
     startMusic (gq) {
-      // eslint-disable-next-line no-unused-vars
-      let geMusicUrl = 'https://musicapi.leanapp.cn/music/url?id=' + gq.id
+      let loding = Toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true,
+        loadingType: 'spinner',
+        forbidClick: true
+      })
+      let geMusicUrl = 'http://liyangit.top:3000/song/url?id=' + gq.id
       axios.get(geMusicUrl).then((res) => {
         gq.src = res.data.data[0].url
         if (gq.src === null) {
-          Toast.fail('该音乐已被网易云设置收费')
+          Toast.fail('该音乐已被网易云设置付费可享!')
         }
-        // eslint-disable-next-line no-unused-vars
         // 判断是否正在播放 如果正在播放 不需要重新设置音乐
-        // eslint-disable-next-line no-unused-vars
-        document.title = gq.title
+        document.title = gq.title + '' + gq.artist
         let isStart = this.$store.state.musicStatus.isStart
         if (isStart === false) {
           this.$store.commit('setMusic', gq)
         } else {
           // 判断 播放是否为同一首歌曲 如果是 继续播放 不用重置音乐
-          // eslint-disable-next-line no-unused-vars
-          // eslint-disable-next-line no-use-before-define
           let gqid = this.$store.state.music.id
           if (gqid !== gq.id) {
             this.$store.commit('setMusic', gq)
@@ -221,15 +237,23 @@ export default {
             // this.$store.commit('setPlayerStyle', '')
           }
         }
-        console.log(this.musicIconStyle)
-        playerApi.showPlay()
-        // eslint-disable-next-line no-unused-vars
+        this.marginBottom = 160
+        setTimeout(()=>{
+          // 两秒之后才显示播放界面，网络波动时可以去除音乐加载中的空白效果
+          loding.clear()
+          playerApi.showPlay()
+        },2000)
+
         let t = document.body.clientHeight // 获取页面最大高度 window.scroll({ top: t, left: 0, behavior: 'smooth' }) 滚动到页面最底部
         window.scroll({ top: 0, left: 0, behavior: 'smooth' }) // 滚动到页面最顶部
       })
     },
+    // 实现每日新音乐 组件点击播放后 更改  歌曲界面的 加载按钮 样式
+    editMarginBottom () {
+      this.marginBottom = 160
+    },
+    // 加载更多歌单
     loadGd () {
-      // eslint-disable-next-line no-unused-vars
       if (this.isLoadGd === false) {
         return
       }
@@ -238,7 +262,6 @@ export default {
         message: '加载歌单...',
         forbidClick: true,
         loadingType: 'spinner',
-        // eslint-disable-next-line no-dupe-keys
         forbidClick: true
       })
       this.gdPage = this.gdPage + 1
@@ -255,14 +278,13 @@ export default {
         }
       })
     },
+    // 加载更多歌曲
     loadGq () {
-      // eslint-disable-next-line no-unused-vars
       let loding = Toast.loading({
         duration: 0,
         message: '加载歌曲...',
         forbidClick: true,
         loadingType: 'spinner',
-        // eslint-disable-next-line no-dupe-keys
         forbidClick: true
       })
       this.gqPage = this.gqPage + 1
@@ -302,28 +324,26 @@ export default {
 
   },
   created () {
-    // eslint-disable-next-line no-unused-vars
     let thic = this
-    // eslint-disable-next-line no-unused-vars
-    let count = 10
-    axios.get('http://47.99.165.122/liyang/music/getPlayList.json', {params: {page: this.gdPage, limit: this.gdLimit}}).then((res) => {
+    axios.get('http://www.liyangit.top/liyang/music/getPlayList.json', {params: {page: this.gdPage, limit: this.gdLimit}}).then((res) => {
       thic.gdList = res.data.data
-      for (let i = 0; i < count; i++) {
-        thic.lbList[i] = thic.gdList[i].picurl
-      }
+      thic.lbList = thic.gdList.slice(0,10)
     })
+ 
   }
 }
 </script>
 <style>
+.found_lbText{
+  font-size: 1.5rem;
+}
 .custom-indicator {
     position: absolute;
     right: 5px;
     bottom: 5px;
     padding: 2px 5px;
-    font-size: 12px;
     background: rgba(0, 0, 0, 0.1);
-    color: red;
+    color: white;
   }
 .head {
   width: 100%;
@@ -333,47 +353,10 @@ export default {
 .van-sticky{
   background-color: white;
 }
-.playImg{
-    position: absolute;
-    top: 10px;
-    right: 0px;
-    width: 5rem;
-    background: #283c86;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #45a247, #283c86);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #45a247, #283c86); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    border-radius: 20px 0px 0px 20px;
-    height: 2.5rem;
-
-}
-.xz {
-    /**
-    -webkit-transition-property: -webkit-transform;
-    -webkit-transition-duration: 1s;
-    -moz-transition-property: -moz-transform;
-    -moz-transition-duration: 1s;
-    -webkit-animation: rotate 3s linear infinite;
-    -moz-animation: rotate 3s linear infinite;
-    -o-animation: rotate 3s linear infinite;
-     */
-    animation: rotate 30s linear infinite;
-
-}
-
-@-webkit-keyframes rotate{from{-webkit-transform: rotate(0deg)}
-    to{-webkit-transform: rotate(360deg)}
-}
-@-moz-keyframes rotate{from{-moz-transform: rotate(0deg)}
-    to{-moz-transform: rotate(359deg)}
-}
-@-o-keyframes rotate{from{-o-transform: rotate(0deg)}
-    to{-o-transform: rotate(359deg)}
-}
-@keyframes rotate{from{transform: rotate(0deg)}
-    to{transform: rotate(359deg)}
-}
 .lbImg{
   height: 100%;
   width: 100%;
+  object-fit: fill;
 }
 .van-swipe__indicator--active{
   background-color: red;
@@ -385,8 +368,15 @@ export default {
     position: absolute;
     font-size: 13px;
 }
-.xf :hover .gdText{
+.xfImg :hover {
   color: red;
+  box-shadow: 0px 0px 5px 1px black;
+  font-size: 1rem;
+
+}
+.xf  :hover .gdText{
+  color: red;
+  font-size: 1rem;
 
 }
 .gdText{
@@ -409,5 +399,59 @@ export default {
     padding-left: 12px;
     background-color:#A4A4A4;
     border-radius: 20px;
+}
+.found_lb{
+  width: 98%;
+  margin: 10px auto;
+  height: 250px;
+  box-shadow: 0px 0px 8px 1px black;
+}
+.van-swipe {
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+    height: 250px;
+}
+.gd{
+  margin-top: 10px;
+}
+#gdxqImg{
+  width: 100%;
+  height:280px;
+  margin-top: -80px;
+}
+.loadGqBtn{
+    margin: 10px auto;
+    width: 150px;
+}
+.van-field__control {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    color: white;
+    line-height: inherit;
+    text-align: left;
+    background-color: transparent;
+    border: 0;
+    resize: none;
+}
+@media(min-width: 768px){
+  .van-popup--bottom {
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: 0 auto;
+    width: 768px;
+}
+#gdxqImg{
+  width: 100%;
+  height:350px;
+  margin-top: -80px;
+}
 }
 </style>

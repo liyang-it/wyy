@@ -1,14 +1,28 @@
 <template>
-  <div id="app">
+<!-- :style="{'height': '100%','background-color':color}" -->
+  <div id="app" >
     <!-- <img src="./assets/logo.png"> -->
-    <router-view />
+       <router-view />
   </div>
 
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
+    // height () {
+    //   return document.documentElement.clientHeight
+    // },
+    // color () {
+    //   return 'pink'
+    // }
+  },
+  created () {
+
+  }
+
 }
 </script>
 
@@ -22,6 +36,11 @@ export default {
   margin-top: 60px;
 
 ) */
-#app {
+.iconsvg {
+width: 1.5rem;
+height: 1.5rem;
+vertical-align: -0.15em;
+fill: currentColor;
+overflow: hidden;
 }
 </style>
