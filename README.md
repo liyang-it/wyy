@@ -1,4 +1,4 @@
-## 运行地址: [网易云](http://liyangit.top/wyy)
+## 运行地址: [网抑云](http://liyangit.top/wyy)
 ## Vue安装脚手架:
 安装node.js后
 
