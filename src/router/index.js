@@ -12,6 +12,7 @@ const geshou = () => import('@/components/other/geshou')
 const pl = () => import('@/components/other/pl')
 const video = () => import('@/components/other/video')
 const gedan = () => import('@/components/other/gedan')
+const down = () => import('@/components/other/down')
 const searchResult = () => import('@/components/found/search-result')
 // const xz = () => import('@/components/other/xz')
 Vue.use(Router)
@@ -100,6 +101,11 @@ export default new Router({
           path: '/gedan/:id',
           name: 'gedan',
           component: gedan
+        },
+        {
+          path: '/down',
+          name: 'down',
+          component: down
         }
       ]
     }

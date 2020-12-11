@@ -89,7 +89,14 @@ export default {
   // 方法集合
   methods: {
     down () {
-      console.info(this.music)
+      let geMusicUrl = 'http://liyangit.top:3000/song/url?id=' + this.music.id
+      axios.get(geMusicUrl).then((res) => {
+        this.music.src = res.data.data[0].url
+        window.sessionStorage.setItem('down_music', JSON.stringify(this.music))
+        this.$router.push({path: '/down'})
+      })
+
+      // playerApi.showGd()
     },
     pl () {
       // 判断当前是否有音乐正在播放 如果有 隐藏音乐悬浮组件

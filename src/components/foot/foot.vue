@@ -21,7 +21,7 @@
     <van-tabbar v-model="tabActive" @change="tabChange">
         <van-tabbar-item to="/foundIndex" icon="browsing-history">发现</van-tabbar-item>
         <van-tabbar-item to="/ranking" icon="fire">排行</van-tabbar-item>
-        <van-tabbar-item to="/me" icon="manager">我的</van-tabbar-item>
+        <van-tabbar-item to="/me" icon="warning">关于</van-tabbar-item>
     </van-tabbar>
     </div>
   </div>

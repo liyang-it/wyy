@@ -3,21 +3,26 @@
 <div class=''>
  <div class="head">
    <div class="head_bg">
-     <img src="../../assets/wyy1.jpg" alt="">
-   </div>
-   <div class="head_content">
-     你好啊
+     <img src="../../assets/wyy2.jpg" alt="">
    </div>
  </div>
  <div class="content">
-  <van-cell  value="前往" @click="toUrl('https://github.com/liyang-it/wyy')">
+  <van-cell v-show="isTrue">
       <template #title >
         <div>
-          <span class="custom-title" style="font-size: 15px;font-weight: bold;">GitHub地址</span>
-          <img alt="GitHub Repo stars" style="position: relative;top: 5px;" src="https://img.shields.io/github/stars/liyang-it/wyy?style=social">
+          <span class="custom-title" style="font-size: 15px;font-weight: bold;">检测到您的设备为:{{device}},请打开Safari手动下载</span>
         </div>
       </template>
   </van-cell>
+  <div style="width: 100%;margin-top: 10px;">
+    <!-- <img src="../../assets/jt.png" alt=""> -->
+    <font style="font-size: 0.8rem;font-weight: 900;color:#2F4F4F;">歌曲:&nbsp;&nbsp;</font>
+    <font class="van-ellipsis" style="font-size: 1.0rem;font-weight: 900;">{{gqName}}</font>
+    <font style="font-size: 0.8rem;font-weight: 900;color:#2F4F4F;">歌手:&nbsp;&nbsp;</font>
+    <font class="van-ellipsis" style="font-size: 1.0rem;font-weight: 900;">{{artist}}</font>
+    <audio style="width: 100%;" controls :src="src"></audio>
+  </div>
+
  </div>
 </div>
 </template>
@@ -39,6 +44,11 @@ export default {
   data () {
     // 这里存放数据
     return {
+      device: '',
+      isTrue: true,
+      gqName:'',
+      artist:'',
+      src:''
 
     }
   },
@@ -48,26 +58,38 @@ export default {
   watch: {},
   // 方法集合
   methods: {
-    toUrl(url){
-      window.location.href = url
-    }
-
   },
   // 生命周期 - 创建完成（可以访问当前this实例）
   created () {
-      let loding = Toast.loading({
-        duration: 0,
-        message: '请求中...',
-        forbidClick: true,
-        loadingType: 'spinner',
-        forbidClick: true
-      })
-      setTimeout(()=>{
-        loding.clear()
-      },2000)
+
   },
   // 生命周期 - 挂载完成（可以访问DOM元素）
   mounted () {
+    let device_type = navigator.userAgent; //获取userAgent信息
+    console.info(device_type)
+    let md = new MobileDetect(device_type); //初始化mobile-detect
+    let os = md.os(); //获取系统
+    console.log(os)
+    let model = "";
+    if (os == "iOS") { //ios系统的处理
+      os = +md.version("iPhone");
+      console.log(os)
+      model = md.mobile();
+    } else if (os == "AndroidOS") { //Android系统的处理
+      os = md.os() + md.version("Android");
+      let sss = device_type.split(";");
+      let i = sss.contains("Build/");
+      if (i > -1) {
+        model = sss[i].substring(0, sss[i].indexOf("Build/"));
+      }
+    }
+    console.log(model + '||' + os, '打印系统版本和手机型号')
+    if(model === 'iPhone'){
+      this.isTrue = true
+      this.device = model
+    }else{
+      this.isTrue = false
+    }
 
   },
   beforeCreate () {}, // 生命周期 - 创建之前
@@ -76,7 +98,13 @@ export default {
   updated () {}, // 生命周期 - 更新之后
   beforeDestroy () {}, // 生命周期 - 销毁之前
   destroyed () {}, // 生命周期 - 销毁完成
-  activated () {} // 如果页面有keep-alive缓存功能，这个函数会触发
+  activated () {
+    let music = JSON.parse(window.sessionStorage.getItem('down_music'))
+    this.src = music.src
+    this.gqName = music.alName
+    this.artist = music.artist
+    console.info(music)
+  } // 如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
 <style  scoped>
@@ -102,17 +130,6 @@ export default {
 .head_bg img{
   width: 100%;
   height: 100%;
-}
-.head_content{
-    position: relative;
-    bottom: 90px;
-    background-color: rgb(134, 129, 129);
-    color: white;
-    width: 90%;
-    margin: 0 auto;
-    height: 100px;
-    border-radius: 10px;
-    display: none;
 }
 .content{
     margin-top: -10px;
