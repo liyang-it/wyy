@@ -24,9 +24,9 @@
               <template #title >
                 <div>
                   <font style="color: tan;font-size: 1.2rem;">{{i + 1}}</font>
-                  <font style="margin-left: 10px;font-size: 0.8rem;">{{h.searchWord}}</font>
+                  <font style="margin-left: 10px;font-size: 0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{h.searchWord}}</font>
                 </div>
-                <div class="van-ellipsis" style="margin-top: 4px;color: #969799;font-size: 12px;line-height: 18px;">{{h.content}}</div>
+                <div class="van-ellipsis" style="margin-top: 4px;color: #969799;font-size: 12px;line-height: 18px;  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{h.content}}</div>
               </template>
               <!-- <template #right-icon>
                  <van-icon name="fire" class="fire" size="26" color="red"/>

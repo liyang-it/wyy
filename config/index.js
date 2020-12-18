@@ -5,6 +5,13 @@
 const path = require('path')
 
 module.exports = {
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `@import "~@/assets/scss/variables.scss";`,
+      },
+    }
+  },
     // 关闭 vue-cli3预加载
     chainWebpack: config => {
       // 移除 prefetch 插件

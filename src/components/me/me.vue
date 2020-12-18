@@ -4,17 +4,26 @@
  <div class="head">
    <div class="head_bg">
      <img src="../../assets/wyy1.jpg" alt="">
+     <div class="head_bg_title"><span>不满足是向上的齿轮。</span></div>
+     <div class="head_bg_author"><span>--鲁迅</span></div>
    </div>
    <div class="head_content">
      你好啊
    </div>
  </div>
- <div class="content">
+  <div class="content">
   <van-cell  value="前往" @click="toUrl('https://github.com/liyang-it/wyy')">
       <template #title >
         <div>
           <span class="custom-title" style="font-size: 15px;font-weight: bold;">GitHub地址</span>
           <img alt="GitHub Repo stars" style="position: relative;top: 5px;" src="https://img.shields.io/github/stars/liyang-it/wyy?style=social">
+        </div>
+      </template>
+  </van-cell>
+  <van-cell  value="前往" @click="toWeichat">
+      <template #title >
+        <div>
+          <span class="custom-title" style="font-size: 15px;font-weight: bold;">微信小程序版</span>
         </div>
       </template>
   </van-cell>
@@ -39,7 +48,7 @@ export default {
   data () {
     // 这里存放数据
     return {
-
+      loading: true
     }
   },
   // 监听属性 类似于data概念
@@ -50,7 +59,8 @@ export default {
   methods: {
     toUrl(url){
       window.location.href = url
-    }
+    },
+    toWeichat () {}
 
   },
   // 生命周期 - 创建完成（可以访问当前this实例）
@@ -63,6 +73,7 @@ export default {
         forbidClick: true
       })
       setTimeout(()=>{
+        this.loading = false
         loding.clear()
       },2000)
   },
@@ -94,6 +105,7 @@ export default {
   width: 100%;
   height: 300px;
   border: 1px solid pink;
+  margin-top: 0px;
 }
 .head_bg{
   height: 100%;
@@ -119,13 +131,50 @@ export default {
     border-radius: 10px;
     overflow: auto;
 }
+.head_bg_title {
+    position: relative;
+    top: -90px;
+    left: 130px;
+}
+.head_bg_author {
+    position: relative;
+    top: -80px;
+    left: 300px;
+}
+.head_bg_author span{
+  color: #ffffff;
+  font-family: 'Long Cang',cursive;
+  letter-spacing: .01rem;
+  text-shadow: 0 3px 6px rgba(0,0,0,.5);
+  
+}
+.head_bg_title span{
+  color: #ffffff;
+  font-family: 'Long Cang',cursive;
+  letter-spacing: .01rem;
+  text-shadow: 0 3px 6px rgba(0,0,0,.5);
+  font-size: 19px;
+
+}
+.van-cell__title :hover{
+  color: red;
+}
 @media(min-width: 668px){
-  .head{
+.head{
   height: 350px;
   border: 1px solid pink;
 }
 .head_bg img{
 object-fit: cover;
 }
+.head_bg_title {
+    width: 192px;
+    left: 510px;
+}
+.head_bg_author {
+    width: 50px;
+    left: 680px;
+}
+
 }
 </style>

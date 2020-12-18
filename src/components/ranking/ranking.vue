@@ -86,7 +86,7 @@ export default {
 /** scoped 表示 样式自在当前组件有效*/
 .rk{
   padding: 10px;
-   position: relative;
+  position: relative;
 }
 .rk_list{
   padding: 5px 0px;

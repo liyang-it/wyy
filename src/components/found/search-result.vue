@@ -44,7 +44,7 @@
             <template #title >
              <div @click="startMusic(t2)">
                <!-- <font style="color: tan;font-size: 1.2rem;">{{i2 + 1}}</font> -->
-               <font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;color: #4994df;font-weight: bold;">{{t2.name}}</font>
+               <font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;color: #4994df;font-weight: bold;" id="gqTitle">{{t2.name}}</font>
             </div>
             </template>
             <template #right-icon>
@@ -101,7 +101,7 @@
             <template #title >
               <div @click="startMusic2(s1)">
                 <font style="color: tan;font-size: 1.2rem;">{{si1 + 1}}</font>
-                <font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;color: #4994df;font-weight: bold;">{{s1.name}}</font>
+                <font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;color: #4994df;font-weight: bold;" id="gqTitle">{{s1.name}}</font>
               </div>
             </template>
             <template #right-icon>
@@ -142,7 +142,7 @@
                 <div >
                   <van-image round width="2.5rem" height="2.5rem" :src="a1.img1v1Url" fit="fill"/>
                   <font style="font-size: 0.9rem;position: absolute;margin-left: 10px;margin-top: 8px;font-weight: bold;">歌手:&nbsp;</font>
-                  <font style="font-size: 1.1rem;position: absolute;margin-left: 50px;margin-top: 8px;color: #4994df;font-weight: bold;">{{a1.name}}</font>
+                  <font style="font-size: 1.1rem;position: absolute;margin-left: 50px;margin-top: 8px;color: #4994df;font-weight: bold;" id="gqTitle">{{a1.name}}</font>
                 </div>
               </template>
           </van-cell>
@@ -490,7 +490,11 @@ export default {
     let isStart = t.$store.state.is.isShowPlayer
     if (isStart === true) {
         t.marginBottom = 160
+        this.$store.commit('setIsShowTitle', true)
+        // this.$store.commit('setIsStop', true)
     }
+
+
     // if (t.searchText.length === 0) {
     //   t.searchText = t.$route.params.value
     // }

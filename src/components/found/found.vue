@@ -17,7 +17,9 @@
         <div>
           <van-cell v-for="(gq, i) in gqList" :key="gq.index" :label="gq.artist+' - '+gq.alName" >
             <template #title >
-             <div @click="startMusic(gq)"><font style="color: tan;font-size: 1.2rem;">{{i + 1}}</font><font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;">{{gq.title}}</font></div>
+             <div @click="startMusic(gq)" ><font style="color: tan;font-size: 1.2rem;">{{i + 1}}</font>
+             <span class="van-ellipsis " style="margin-left: 10px;font-size: 1.0rem;font-weight: bold;" id="gqTitle">{{gq.title}}</span>
+             </div>
             </template>
             <template #right-icon>
                 <van-icon name="bars" class="more" size="35" @click="songde(gq)" style="background-color: white;position: absolute;right: 5px;"/>
@@ -78,14 +80,17 @@
       <van-grid :column-num="columnGd" :style="{'margin-bottom':marginBottom + 'px'}">
         <van-grid-item class="xf"  v-for="gd in gdList" :key="gd.index" @click="toGdPage(gd)" >
           <div >
-          <van-image  :src="gd.picurl" class="xfImg"/>
-          <p class="bfl"><van-icon name="service-o" size="15"></van-icon> {{ gd.playcount}}</p>
-          <div style="height: 20px;">
-            <span  class="gdText">{{ gd.name.substring(0,6)}}...</span>
-          </div>
+            <div class="xfImg">
+               <van-image  :src="gd.picurl" />
+            </div>
+            <p class="bfl"><van-icon name="service-o" size="15"></van-icon> {{ gd.playcount}}</p>
+            <div style="height: 20px;">
+              <span  class="gdText">{{ gd.name.substring(0,6)}}...</span>
+            </div>
           </div>
         </van-grid-item>
         <div  style="margin-top: 20px;width: 150px;margin: 0 auto;" >
+          <br>
         <van-button round color="linear-gradient(to right, #ff6034, #ee0a24)" type="primary" block @click="loadGd">{{loadGdText}}</van-button>
       </div>
       </van-grid>
@@ -346,12 +351,17 @@ export default {
     let isStart = t.$store.state.is.isShowPlayer
     if (isStart === true) {
         t.marginBottom = 160
+        this.$store.commit('setIsShowTitle', true)
+        // this.$store.commit('setIsStop', true)
     }
   } 
 }
 </script>
-<style>
-
+<style lang="scss">
+div{
+  /** 所有div 当鼠标 移动到 div中改变鼠标样式*/
+  cursor: pointer;
+}
 .found_lbText{
   font-size: 1.5rem;
 }
@@ -386,27 +396,32 @@ export default {
     position: absolute;
     font-size: 13px;
 }
+/** img 动画样式 */
+.van-image__img {
+  transition: all 0.3s linear;
+  -webkit-transition: all 0.3s linear;
+}
+
+/**图片上层div */
 .xfImg{
-  transition: all 0.2s linear;
-  -webkit-transition: all 0.2s linear;
+  transition: all 0.3s linear;
+  -webkit-transition: all 0.3s linear;
 }
-.xfImg :hover {
-  color: red;
-  box-shadow: 0px 0px 10px 2px rgb(36, 35, 35);
-  transform: scale(0.9); 
+.xfImg:hover{
+  box-shadow: 0px 0px 8px 2px rgb(131, 128, 128);
 }
-.xfImg :active {
-  color: red;
-  box-shadow: 0px 0px 10px 2px rgb(36, 35, 35);
-  transform: scale(0.9); 
+/**鼠标移动 img到内容触发效果 字体变红 图片变大 */
+.van-grid-item__content--center:hover{
+  .gdText{
+    color: red;
+  }
+  .van-image__img{
+    transform: scale(1.1)
+  }
 }
-.xf :hover .gdText{
-  color: red;
-  font-size: 1rem;
-}
-.xf :active .gdText{
-  color: red;
-  font-size: 1rem;
+/** 图片放大 溢出的部分隐藏 */
+.van-image{
+  overflow: hidden;
 }
 .gdText{
     font-size: 0.8rem;
@@ -471,6 +486,17 @@ export default {
     border: 0;
     resize: none;
 }
+#gqTitle{
+  transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+}
+.van-cell__title:hover{
+  #gqTitle{
+  color: red;
+  text-decoration: underline;
+}
+}
+
 @media(min-width: 768px){
   .van-popup--bottom {
     bottom: 0;
@@ -483,6 +509,9 @@ export default {
   width: 100%;
   height:350px;
   margin-top: -80px;
+}
+.xfImg{
+  height: 240px;
 }
 }
 </style>

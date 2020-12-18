@@ -22,7 +22,7 @@
             <template #title >
               <div @click="startMusic(s1)">
                 <font style="color: tan;font-size: 1.2rem;">{{si1 + 1}}</font>
-                <font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;font-weight: bold;">{{s1.name}}</font>
+                <font class="van-ellipsis" style="margin-left: 10px;font-size: 1.0rem;font-weight: bold;" id="gqTitle">{{s1.name}}</font>
               </div>
             </template>
             <template #right-icon>
@@ -215,6 +215,11 @@ export default {
       })
     let t = this 
     let id = t.$route.params.id
+    let isStart = this.$store.state.is.isShowPlayer
+    if (isStart) {
+      this.$store.commit('setIsShowTitle', true)
+      // this.$store.commit('setIsStop', false)
+    }
     t.loadContent = false
     t.loadText = true
     axios.get('http://liyangit.top:3000/playlist/detail?id='+id).then((res=>{
