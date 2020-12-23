@@ -14,7 +14,7 @@
       </div>
       <div class="content">
         <span>{{gdName}}</span>
-         <p>{{desc}}啊实打实大实打实的啥大所大所大所大所大所大所多阿仕顿阿仕顿阿仕顿奥术大师大所多撒多</p>
+         <p>{{desc}}</p>
       </div>
     </div>
     <div class="musics" >
@@ -288,6 +288,7 @@ export default {
 .sltDiv .content{
   margin-left: 150px;
   width: 60%;
+  /**超出 特定宽度文本 换行 */
   word-break:normal;
   display:block;
   word-wrap:break-word;
@@ -300,6 +301,8 @@ export default {
   font-weight: bold;
   color: white;
   width:100%;
+  position: relative;
+  top: 15px;
 }
 .content p{
   font-size: 0.8rem;

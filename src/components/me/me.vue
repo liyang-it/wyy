@@ -28,6 +28,9 @@
       </template>
   </van-cell>
  </div>
+  <div class="gy">
+    <span>此小程序仅供学习，所有资源来自互联网，音乐版权归唱片公司所有，如有侵权请联系删除 1922802352@qq.com</span>
+  </div>
 </div>
 </template>
 
@@ -35,7 +38,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 /* eslint-disable */
-import {Skeleton,Cell, CellGroup,Icon,Toast } from 'vant'
+import {Skeleton,Cell, CellGroup,Icon,Toast,Dialog } from 'vant'
 export default {
 // import引入的组件需要注入到对象中才能使用
   components: {
@@ -43,7 +46,8 @@ export default {
     [Cell.name]: Cell,
     [CellGroup.name]:CellGroup,
     [Icon.name]:Icon,
-    [Toast.name]:Toast
+    [Toast.name]:Toast,
+    [Dialog.name]: Dialog
   },
   data () {
     // 这里存放数据
@@ -60,7 +64,15 @@ export default {
     toUrl(url){
       window.location.href = url
     },
-    toWeichat () {}
+    toWeichat () {
+      this.$dialog.alert(
+        {
+            title: '微信小程序',
+            message: '<img src="http://www.file.liyangit.top/wyy/scan.png" style="width: 100%;height: 100%;"/>',
+            theme: 'round-button',
+        }
+      )
+    }
 
   },
   // 生命周期 - 创建完成（可以访问当前this实例）
@@ -158,6 +170,11 @@ export default {
 }
 .van-cell__title :hover{
   color: red;
+}
+.gy{
+  font-size: 12px;
+  text-align: center;
+  color: #B3B3B3;
 }
 @media(min-width: 668px){
 .head{
