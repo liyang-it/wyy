@@ -35,9 +35,12 @@
     </div>
   </div>
   <!-- songde 歌曲详情按钮-->
-  <van-popup v-model="showSongde" round position="bottom" :style="{ height: '30%' }" >
-    <song-popup :music_popup="music_popup"></song-popup>
-  </van-popup>
+  <div id="popup_id">
+    <van-popup v-model="showSongde" round position="bottom" :style="{ height: '30%' }" >
+      <song-popup :music_popup="music_popup"></song-popup>
+    </van-popup>
+  </div>
+
   <div v-show="loadText">
     <h3>加载中...</h3>
   </div>
@@ -97,6 +100,7 @@ export default {
       object.id = gq.id
       object.title = gq.name
       object.artist = gq.ar[0].name
+      object.pls = gq.pls
       document.title = object.title + '-' + object.artist
       // 请求获取歌曲封面
       axios.get('http://liyangit.top:3000/song/detail?ids='+object.id).then((res)=>{
@@ -112,9 +116,6 @@ export default {
         loadingType: 'spinner',
         forbidClick: true
       })
-      let geMusicUrl = 'http://liyangit.top:3000/song/url?id=' + gq.id
-      axios.get(geMusicUrl).then((res) => {
-        gq.src = res.data.data[0].url
         if (gq.src === null) {
           Toast.fail('该音乐已被网易云设置付费可享!')
         }
@@ -129,13 +130,13 @@ export default {
             t.$store.commit('setMusic', gq)
           }
         }
+        console.info(gq)
         // t.editMarginBottom()
         t.marginBottom = 160
         setTimeout(() => {
           loding.clear()
           playerApi.showPlay()
         }, 2000)
-      })
     },
     // 加载歌曲
     loadGq () {
@@ -163,12 +164,14 @@ export default {
         axios.all(
           [
             axios.get('http://liyangit.top:3000/song/detail?ids='+ gqId),
-            axios.get('http://liyangit.top:3000/song/url?id='+gqId)
+            axios.get('http://liyangit.top:3000/song/url?id='+gqId),
+            axios.get('https://www.liyangit.top:9443/comment/hot?id='+gqId+'&type=0&limit=50')
           ]
         ).then(res=>{
           let object = new Object()
           object = res[0].data.songs[0]
           object.url = res[1].data.data[0].url
+          object.pls = res[2].data.hotComments
           this.gqs.push(object)
           setTimeout(()=>{
             this.loadContent = true
@@ -237,12 +240,14 @@ export default {
         axios.all(
           [
             axios.get('http://liyangit.top:3000/song/detail?ids='+ gqId),
-            axios.get('http://liyangit.top:3000/song/url?id='+gqId)
+            axios.get('http://liyangit.top:3000/song/url?id='+gqId),
+            axios.get('https://www.liyangit.top:9443/comment/hot?id='+gqId+'&type=0&limit=50')
           ]
         ).then(res=>{
           let object = new Object()
           object = res[0].data.songs[0]
           object.url = res[1].data.data[0].url
+          object.pls = res[2].data.hotComments
           t.gqs.push(object)
           setTimeout(()=>{
             t.loadContent = true
@@ -256,8 +261,20 @@ export default {
   } // 如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 /** scoped 表示 样式自在当前组件有效*/
+@media(min-width: 768px){
+  #popup_id{
+    .van-popup--bottom {
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: 0 auto;
+    width: 768px;
+    }
+  }
+
+}
 .imgDiv{
   width: 100%;
   height: 250px;

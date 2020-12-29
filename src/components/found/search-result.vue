@@ -13,10 +13,13 @@
             </van-search>
      </van-sticky>
   </div>
+  <div id="popup_id">
           <!-- songde 歌曲详情按钮-->
           <van-popup v-model="showSongde" round position="bottom" :style="{ height: '30%' }" >
              <song-popup :music_popup="music_popup"></song-popup>
           </van-popup>
+  </div>
+
   <div>
     <van-tabs v-model="active" sticky animated>
       <van-tab title="综合"  :style="{'margin-bottom': marginBottom+'px'}">
@@ -299,8 +302,13 @@ export default {
         forbidClick: true
       })
       let geMusicUrl = 'http://liyangit.top:3000/song/url?id=' + gq.id
-      axios.get(geMusicUrl).then((res) => {
-        gq.src = res.data.data[0].url
+      let plUrl = 'https://www.liyangit.top:9443/comment/hot?id='+gq.id+'&type=0&limit=50'
+      axios.all([
+        axios.get(geMusicUrl),
+        axios.get(plUrl)
+      ]).then(res=>{
+        gq.src = res[0].data.data[0].url
+        gq.pls = res[1].data.hotComments
         if (gq.src === null) {
           Toast.fail('该音乐已被网易云设置付费可享!')
         }
@@ -322,6 +330,7 @@ export default {
           playerApi.showPlay()
         }, 2000)
       })
+
     },
     // 打开歌手界面
     openGs (gs) {
@@ -508,8 +517,20 @@ export default {
   } // 如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
-<style  scoped>
+<style lang="scss" scoped>
 /** scoped 表示 样式自在当前组件有效*/
+@media(min-width: 768px){
+  #popup_id{
+    .van-popup--bottom {
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: 0 auto;
+    width: 768px;
+    }
+  }
+
+}
 .van-search__action {
     padding: 0 8px;
     color: #323233;

@@ -31,9 +31,12 @@
           <br>
         </div>
   <!-- songde 歌曲详情按钮-->
-  <van-popup v-model="showSongde" round position="bottom" :style="{ height: '30%' }" >
-    <song-popup :music_popup="music_popup"></song-popup>
-  </van-popup>
+  <div id="popup_id">
+      <van-popup v-model="showSongde" round position="bottom" :style="{ height: '30%' }" >
+        <song-popup :music_popup="music_popup"></song-popup>
+      </van-popup>
+  </div>
+
 </div>
 </transition>
   <!--轮播图片 、歌单 、 新音乐-->
@@ -232,9 +235,16 @@ export default {
         loadingType: 'spinner',
         forbidClick: true
       })
+        // 请求获取评论
       let geMusicUrl = 'http://liyangit.top:3000/song/url?id=' + gq.id
-      axios.get(geMusicUrl).then((res) => {
-        gq.src = res.data.data[0].url
+      let plUrl = 'https://www.liyangit.top:9443/comment/hot?id='+gq.id+'&type=0&limit=50'
+      axios.all([
+        axios.get(geMusicUrl),
+        axios.get(plUrl)
+      ]).then(res=>{
+        console.info(res)
+        gq.src = res[0].data.data[0].url
+        gq.pls = res[1].data.hotComments
         if (gq.src === null) {
           Toast.fail('该音乐已被网易云设置付费可享!')
         }
@@ -498,13 +508,16 @@ div{
 }
 
 @media(min-width: 768px){
-  .van-popup--bottom {
+  #popup_id{
+    .van-popup--bottom {
     bottom: 0;
     left: 0;
     right:0;
     margin: 0 auto;
     width: 768px;
-}
+    }
+  }
+
 #gdxqImg{
   width: 100%;
   height:350px;

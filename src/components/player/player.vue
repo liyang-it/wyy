@@ -5,14 +5,16 @@
         <div style="margin-left: 10px; margin-top: 10px;"><van-icon name="arrow-down" size="30" @click="backGd"/></div>
         <div>
           <h3 class="h3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{music.title}} - {{music.artist}}</h3>
-          <!-- <h4 class="h4"></h4> -->
         </div>
       </div>
     <div class="contentImg" >
-        <div  class="musicConten" :style="{'height': pmHeight}">
+        <div  class="musicConten" :style="{'height': pmHeight}" id="musicImage">
           <van-image class="xz" width="100%" height="100%" :src="music.pic"/>
           <audio :src="music.src" ref="audio"  @ended="ended" @loadeddata="loadeddata" @timeupdate="timeupdate" @error="error" autoplay></audio>
         </div>
+    </div>
+    <div class="down" @click="down">
+      <span>下载歌曲</span>
     </div>
     <div class="btns">
       <table >
@@ -22,12 +24,31 @@
           <td style="width: 55px;text-align: right;"><font>{{$store.state.musicStatus.stopTime}}</font></td>
         </tr>
         <tr>
-          <td><van-icon name="exchange" size="30" color="white"/></td> <!--pause-circle-->
+          <!-- <td><van-icon name="exchange" size="30" color="white"/></td>
           <td><van-icon :name="playIcon" size="35" @click="play" color="white" /></td>
           <td><van-icon name="down"  size="30" @click="down" color="white"/></td>
+          <td></td> -->
+          <td> <img src="../../assets/play/left.png" alt="" srcset=""></td>
+          <td><van-icon :name="playIcon" size="35" @click="play" color="white" /></td>
+          <td><img src="../../assets/play/right.png" alt="" srcset=""></td>
           <td></td>
         </tr>
       </table>
+      </div>
+      <div class="pls">
+        <div class="pls-title">精彩评论</div>
+        <div v-if="pls.length == 0" style="text-align: center;">
+          <h3 >此歌曲无精彩评论</h3>
+        </div>
+        <div class="pls-content" v-else>
+          <div v-for="(item,index) in pls" :key="index" >
+            <div class="pls-content-img" ><img :src="item.user.avatarUrl"/></div>
+            <div class="pls-content-title-name">{{item.user.nickname}}</div>
+            <div class="pls-content-title-time"> 我是时间 </div>
+            <div class="pls-content-count">{{item.likedCount}}<img src="../../assets/play/dz.png"/></div>
+            <div class="pls-content-text">{{item.content}} </div>
+          </div>
+        </div>
       </div>
   </div>
 </template>
@@ -84,6 +105,9 @@ export default {
     music () {
       return this.$store.state.music
     },
+    pls(){
+      return this.$store.state.music.pls
+    },
     pmHeight () {
       let height = document.documentElement.clientWidth * 0.75
       return height
@@ -91,6 +115,8 @@ export default {
     height () {
       return this.height_
     }
+  },
+  created(){
   },
   mounted () {
     let t = this
@@ -204,6 +230,7 @@ export default {
 <style >
 .player{
   background-size: cover;
+  overflow: hidden;
 }
 
   .headMusic{
@@ -222,12 +249,24 @@ export default {
     margin-top: -18px;
   }
   .musicBody{
-    background-size: cover;
     margin-top: -10px;
-    filter: blur(6px);
+    /* filter: blur(20px);
+    transform: scale(2); */
+    position: fixed;
+    width: 100%;
+  }
+  .musicBody::before{
+    background-color: rgba(0, 0, 0, .5);
+    content: '';
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
   }
   .musicConten{
-    width: 75%;
+    width: 320px;
     margin: 0 auto;
   }
   .contentImg{
@@ -235,14 +274,37 @@ export default {
     top: 10%;
     position: absolute;
   }
-
+  #musicImage .van-image__img{
+    width: 320px;
+    height: 240px;
+  }
+  .down{
+    position: absolute;
+    top: 45%;
+    width: 200px;
+    height: 40px;
+    border-radius: 30px;
+    text-align: center;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    color: white;
+    box-shadow: 0px 0px 3px 0.5px white;
+  }
+  .down span{
+    position: relative;
+    top: 8px;
+  }
   .btns font{
     color: white;
   }
   .btns table{
-    width: 90%;
+    width: 80%;
     margin: 0 auto;
     text-align: center;
+  }
+  .btns img{
+    width: 28px;
   }
   .van-slider__button {
     width: 12px;
@@ -251,7 +313,7 @@ export default {
   .btns {
     width: 98%;
     height: 100px;
-    bottom: 12%;
+    top: 51%;
     position: absolute;
   }
   .xz{
@@ -259,6 +321,20 @@ export default {
     overflow: auto;
   }
   @media (min-width: 768px){
+  .musicBody{
+    margin-top: -10px;
+    /* filter: blur(20px);
+    transform: scale(2); */
+    position: fixed;
+    width: 768px;
+  }
+  .musicConten{
+    width: 50%;
+  }
+  #musicImage .van-image__img{
+    width: 320px;
+    height: 240px;
+  }
   .headMusic{
     top: -10px;
     width: 768px;
@@ -267,15 +343,79 @@ export default {
     position: absolute;
   }
   .btns {
-    width: 768px;
+    width: 600px;
     height: 100px;
     bottom: 12%;
     position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
     }
   .contentImg{
     width: 768px;
     top: 10%;
     position: absolute;
   }
+  .pls{
+    width: 740px;
   }
+  }
+  /* 评论*/
+.pls{
+  position: absolute;
+  top: 63%;
+  padding: 0px 30px;
+  color: white; 
+}
+.pls .pls-title{
+  font-weight: bold;
+  font-size: 18px;
+}
+.pls .pls-content{
+  padding: 10px;
+}
+.pls-content-img{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.pls-content-img img{
+  width: 100%;
+  height: 100%;
+}
+.pls-content-title-name{
+  left: 50px;
+  top: -40px;
+  font-size: 15px;
+  color: #E6E6E6;
+  position: relative;
+}
+.pls-content-title-time{
+  position: relative;
+  left: 50px;
+  top: -40px;
+  font-size: 12px;
+  color: #C4C4C4;
+}
+.pls-content-count{
+  position: relative;
+  text-align: right;
+  top: -75px;
+  font-size: 13px;
+  color: #E6E6E6;
+}
+.pls-content-count img{
+  width: 18px;
+  height: 18px;
+  margin-left: 3px;
+}
+.pls-content-text{
+  position: relative;
+  left: 50px;
+  width: 80%;
+  top: -55px;
+  font-size: 15px;
+  font-weight: bold;
+}
 </style>
