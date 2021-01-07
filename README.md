@@ -1,69 +1,44 @@
-## ÔËÐÐµØÖ·: [ÍøÒÖÔÆ](http://liyangit.top/wyy)
-## Vue°²×°½ÅÊÖ¼Ü:
-°²×°node.jsºó
+## è¿è¡Œåœ°å€: [æŸ æª¬é…¸éŸ³ä¹](https://liyangit.top/wyy)
 
-ÔÚcmd»òÕßvscode´ò¿ªÖÕ¶Ë
+## å°ç¨‹åºç‰ˆ: [æŸ æª¬é…¸éŸ³ä¹](https://github.com/liyang-it/wyy-weapp)
 
-Ñ¡ÔñºÃÎÄ¼þ¼Ð
+## Vueå®‰è£…è„šæ‰‹æž¶:
+å®‰è£…node.jsåŽ
 
-°²×°½ÅÊÖ¼Ü:    
+åœ¨cmdæˆ–è€…vscodeæ‰“å¼€ç»ˆç«¯
+
+é€‰æ‹©å¥½æ–‡ä»¶å¤¹
+
+å®‰è£…è„šæ‰‹æž¶:    
 
 npm install -g vue-cli
 
-°²×° webpack(´ò°üjsµÄ¹¤¾ß): 	npm install -g webpack 
+å®‰è£… webpack(æ‰“åŒ…jsçš„å·¥å…·): 	npm install -g webpack 
 
-ÒÔÉÏ²Ù×÷ ÊÇ Ö»°²×°Ò»´Î¼´¿É
+ä»¥ä¸Šæ“ä½œ æ˜¯ åªå®‰è£…ä¸€æ¬¡å³å¯
 
-´´½¨vueÏîÄ¿:  vue init webpack ÏîÄ¿Ãû 
+åˆ›å»ºvueé¡¹ç›®:  vue init webpack é¡¹ç›®å 
 
-ÔËÐÐÏîÄ¿:   ÏÈcdµ½ÏîÄ¿ÎÄ¼þ¼Ð£¬cd VueÏîÄ¿£¬È»ºóÊäÈëÒÔÏÂÖ¸Áî  npm run dev
+è¿è¡Œé¡¹ç›®:   å…ˆcdåˆ°é¡¹ç›®æ–‡ä»¶å¤¹ï¼Œcd Vueé¡¹ç›®ï¼Œç„¶åŽè¾“å…¥ä»¥ä¸‹æŒ‡ä»¤  npm run dev
 
 ## Git:
 
-Á¬½ÓÔ¶³Ìgit¿â
+è¿žæŽ¥è¿œç¨‹gitåº“
 
-git init ³õÊ¼»¯µ±Ç°Ä¿Â¼Îªgit¿É¹ÜÀí×´Ì¬
+git init åˆå§‹åŒ–å½“å‰ç›®å½•ä¸ºgitå¯ç®¡ç†çŠ¶æ€
 
-git remote add origin git ÏîÄ¿µØÖ·
+git remote add origin git é¡¹ç›®åœ°å€
 
-²é¿´µ±Ç°ÏîÄ¿ ÐÂÔöÁËÄÇÐ©ÎÄ¼þÊÇ·ñÒÑÌá½» 
+æŸ¥çœ‹å½“å‰é¡¹ç›® æ–°å¢žäº†é‚£äº›æ–‡ä»¶æ˜¯å¦å·²æäº¤ 
 git status
 
-½«ÏîÄ¿µÄËùÓÐÎÄ¼þÌí¼Óµ½»º´æÖÐ:
+å°†é¡¹ç›®çš„æ‰€æœ‰æ–‡ä»¶æ·»åŠ åˆ°ç¼“å­˜ä¸­:
 git add .
 
-½«»º´æÖÐµÄÎÄ¼þCommitµ½git¿â
+å°†ç¼“å­˜ä¸­çš„æ–‡ä»¶Commitåˆ°gitåº“
 
-git commit -m "Ìí¼ÓÄãµÄ×¢ÊÍ,Ò»°ãÊÇÒ»Ð©¸ü¸ÄÐÅÏ¢"
+git commit -m "æ·»åŠ ä½ çš„æ³¨é‡Š,ä¸€èˆ¬æ˜¯ä¸€äº›æ›´æ”¹ä¿¡æ¯"
 
-½«´úÂëÍÆËÍµ½git
+å°†ä»£ç æŽ¨é€åˆ°git
 
-git push origin master »òÕß git push »òÕß git push -f
-> A Vue.js project
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+git push origin master æˆ–è€… git push æˆ–è€… git push -f
