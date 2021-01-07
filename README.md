@@ -1,4 +1,4 @@
-## 运行地址: [柠檬酸音乐](https://liyangit.top/wyy)
+## 运行地址: [网抑云](https://liyangit.top/wyy)
 
 ## 小程序版: [柠檬酸音乐](https://github.com/liyang-it/wyy-weapp)
 
